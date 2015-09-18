@@ -5,7 +5,7 @@
     class Thread extends AppModel
     {
     	
-    	function static function getAll()
+    	public static function getAll()
     	{
     		$threads = array();
 
