@@ -48,6 +48,10 @@
 
     	public function write(Comment $comment)
     	{
+            if(!$comment->validate()){
+                throw new ValidationException("Invalid Comment");
+            }
+
     		$db = DB::conn();
     		$db->query('INSERT INTO comment SET thread_id = ?, username = ?, body = ?, created = NOW()', 
     			    array($this->id, $comment->username, $comment->body));
