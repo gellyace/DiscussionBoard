@@ -40,9 +40,9 @@
     		$rows = $db->rows('SELECT * FROM comment WHERE thread_id = ? ORDER BY created ASC', array($this->id));
 
     		foreach ($rows as $row) {
-    			$comments[] = new Comments($row);
+    			$comments[] = new Comment($row);
     		}
-    		return $comments
+    		return $comments;
     	}
     }
 ?>
