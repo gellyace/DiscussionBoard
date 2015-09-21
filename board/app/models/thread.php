@@ -71,9 +71,11 @@
             $db = DB::conn();
             $db->begin();
 
+            /*
             $params = array('title' => $this->title,);
             $db->insert('thread', $params);
-            // or   
+            // or
+            */   
             $db->query('INSERT INTO thread SET title = ?, created = NOW()', array($this->title));
 
             $this->id = $db->lastInsertId();
