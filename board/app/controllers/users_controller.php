@@ -1,12 +1,13 @@
 <?php
 class UsersController extends AppController
 {
-    public function index() // login home page
-    {
-        
+    public function index() //login ~ index.php
+    {        
+    	$user = new Users;
+    	
     }
 
-    public function register() // register page
+    public function register() 
     {
     	$user = new Users;
         $page = Param::get('page_next', 'register');
@@ -34,5 +35,10 @@ class UsersController extends AppController
         }
             $this->set(get_defined_vars());
             $this->render($page);
+    }
+
+    
+    public function logout(){
+
     }
 }
