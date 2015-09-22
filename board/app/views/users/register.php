@@ -56,10 +56,7 @@
 	    <label>Password</label> 
 	    <input type="password" class="span2" name="password" placeholder="Password" value="<?php eh(Param::get('password')) ?>">
 	    
-	    <!--<label>Re-type Password</label> 
-	    <input type="password" class="span2" name="password" placeholder="Re-type Password" value="<?php eh(Param::get('password')) ?>">
-		-->	
-
+	    
 	    <br/>
 	    <input type="hidden" name="page_next" value="register_end">
 	    <button type="submit" class="btn btn-primary"> Submit </button>
