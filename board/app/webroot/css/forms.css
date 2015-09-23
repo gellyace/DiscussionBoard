@@ -1,3 +1,23 @@
+* {
+
+}
 label {
 	color: black;
+}
+#header {
+	text-align: center;
+}
+
+#rcorners2 {
+    border-radius: 15px 50px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#body {
+	text-align: center;
 }
