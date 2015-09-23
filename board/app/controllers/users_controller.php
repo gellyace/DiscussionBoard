@@ -2,9 +2,31 @@
 class UsersController extends AppController
 {
     public function index() //login ~ index.php
-    {        
+    {   
+
     	$user = new Users;
-    	
+    	$page = Param::get('page_next', 'index');
+
+    	switch ($page) {
+    		case 'index':
+    			break;
+
+    		case 'index_end':
+    			$user->username = Param::get('username');                
+                $user->password=Param::get('password');
+                try {
+                    $user->index($user);
+                } catch (ValidationException $e) {
+                    $page='index';
+                }
+    			break;
+
+    		default:
+    			throw new RecordNotFoundException("{$page} is not found");
+    			break;
+    	}
+    		$this->set(get_defined_vars());
+            $this->render($page);
     }
 
     public function register() 
@@ -30,7 +52,7 @@ class UsersController extends AppController
                     break;
 
             default:
-                throw new NotFoundException("{$page} is not found");                    
+                throw new RecordNotFoundException("{$page} is not found");                    
                 break;
         }
             $this->set(get_defined_vars());
@@ -39,6 +61,6 @@ class UsersController extends AppController
 
     
     public function logout(){
-
+    	$this->redirect($this->Auth->logout());
     }
 }
