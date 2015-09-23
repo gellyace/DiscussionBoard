@@ -101,7 +101,7 @@ class Users extends AppModel
 
     			session_start();
     			$_SESSION['sid'] = session_id();
-    			self::redirect(url('users/index_end'));
+    			redirect(url('users/index_end'));
     		}
     		else{    
     			var_dump($password);
@@ -117,10 +117,10 @@ class Users extends AppModel
     }
 
     
-    public function redirect($url)
-    {
-        
+public function redirect($url)
+    {        
     	header('Location: '.$url);
+    	exit();
     	
     }
 }
