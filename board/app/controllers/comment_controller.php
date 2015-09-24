@@ -1,8 +1,7 @@
 <?php
-    class ThreadController extends AppController 
-    {
-        
-        public function index()
+class CommentController extends AppController
+{
+    public function index()
         {
             $threads = Thread::getAll();
             $this->set(get_defined_vars());
@@ -16,40 +15,36 @@
             $this->set(get_defined_vars());
         }
 
-        
-        public function create()
+        public function write()
         {
-            $thread = new Thread;
+            $thread = Thread::get(Param::get('thread_id'));
             $comment = new Comment;
-            $page = Param::get('page_next', 'create');
+            $page = Param::get('page_next', 'write');
 
             switch ($page) {
-                case 'create':
-                    break;
-                
-                case 'create_end':
-                    session_start();
-                    
-                    $thread->title = Param::get('title');
-                    $comment->username=$_SESSION['username'];
-                    $comment->body=Param::get('body');
-                    
-                    try {
-                        $thread->create($comment);
-                    } catch (ValidationException $e) {
-                        $page='create';
-                    }
+
+                case 'write':
                     break;
 
+                case 'write_end':
+                    session_start();
+                    $comment->username = $_SESSION['username'];
+                    $comment->body = Param::get('body');
+                    try {
+                        $comment->write($thread->id);
+                    } catch (ValidationException $e) {
+                        $page = 'write';
+                    }
+                    break;
+                
                 default:
-                    throw new NotFoundException("{$page} is not found");                    
+                    throw new NotFoundException("{$page} is not found");
                     break;
             }
+
             $this->set(get_defined_vars());
             $this->render($page);
         }
-
-        
-        
-    }
-?>
+       
+   
+}
