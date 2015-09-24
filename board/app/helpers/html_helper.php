@@ -14,9 +14,9 @@ function readable_text($s)
 }
 
 
-/*function redirect($url)
+function redirect($url)
 {        
     header('Location: '.$url);
     exit();
     	
-}*/
+}
