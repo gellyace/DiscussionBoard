@@ -33,3 +33,7 @@
 	<input type="hidden" name="page_next" value="create_end">
 	<button type="submit" class="btn btn-primary"> Submit </button>
 </form>
+
+<a href="<?php eh(url('thread/index', array('thread_id' => $thread->id))) ?>">
+    &larr; Go to thread
+</a>
