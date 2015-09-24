@@ -1,3 +1,7 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head> 
@@ -5,13 +9,16 @@
 </head>
 <body>
 
-<!-- Wrong credentials of user-->
-<?php if (!$user->user_validated): ?>
-	<div class="alert alert-error">
-		<em><h4 class="alert-heading">Wait!</h4></em>
-		<em>Invalid Username or Password</em>
-	</div>
+<?php if(!$user->user_validated): ?>
+<div class="row">
+    <div class="col-md-3 col-md-offset-4">
+        <div class="alert alert-danger" role="alert" width="40%">
+            <h4>Invalid username or password!</h4>
+        </div>
+    </div>
+</div>
 <?php endif ?>
+
 
 
 <div id="header"> <h2>Welcome Guest</h2> </div>
@@ -25,7 +32,7 @@
 			<input type="password" class="span2" name="password" placeholder="password" value="<?php eh(Param::get('password')) ?>" />
 
 			<br/>
-			<!-- Redirection to home, if logging in is succesful-->		
+			<!-- Redirection to Welcome Page, if logging in is succesful-->		
 			<input type="hidden" name="page_next" value="index_end">	
 			<button type="submit" class="btn btn-primary"> Login </button>
 			<br/><br/> 
