@@ -20,3 +20,10 @@ function redirect($url)
     exit();
     	
 }
+
+function is_logged_in()
+{
+    if (!isset($_SESSION['id'])) {
+        redirect('thread/index');
+    } 
+}
