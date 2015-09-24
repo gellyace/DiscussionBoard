@@ -1,19 +1,15 @@
 <?php
-	session_start();
-	if($_SESSION['sid']==session_id())
-	{
-		echo "Welcome to you<br>";
+    $username = $_SESSION['username'];
 ?>
-		<a href="<?php eh(url('thread/index')) ?>"> &larr; Thread Page </a>
-
-<?php }
-	else
-	{
-		redirect(url('users/index'));
-	}
-?>
-
-
-
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<h3>Welcome Back <?php echo $username ?> </h3>
+	<a href="<?php eh(url('thread/index')) ?>"> &larr; Thread Page </a>
+</body>
+</html>
 
 
