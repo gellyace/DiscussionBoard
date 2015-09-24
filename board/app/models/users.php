@@ -49,18 +49,15 @@ class Users extends AppModel
 	public function getHashedPassword($username)
 	{
 		$db = DB::conn();
-
     	$row = $db->row('SELECT password FROM users WHERE username = ?', array($username));
-
     	return $row['password'];
 	}
 
+	
 	public function getId($username)
 	{
 		$db = DB::conn();
-
     	$row = $db->row('SELECT id FROM users WHERE username = ?', array($username));
-
     	return $row['id'];
 	}
 
@@ -68,10 +65,8 @@ class Users extends AppModel
 	
     public function register(Users $user)
     {
-        
-        if (!$this->validate()) {                    
+        if (!$this->validate())                   
             throw new ValidationException('Registration not valid');
-        }
 
         $hashedPassword = self::generateHash($this->password); //encrypts password before storing it
 
@@ -79,8 +74,7 @@ class Users extends AppModel
         $db->begin();
 
         $db->query('INSERT INTO users SET username = ?, firstname = ?, lastname = ?, email = ?, password = ?, created = NOW()', array($user->username, $user->firstname, $user->lastname, $user->email, $hashedPassword));
-        $this->id = $db->lastInsertId();
-                   
+        $this->id = $db->lastInsertId();  
         
         $db->commit();
     }
@@ -93,22 +87,17 @@ class Users extends AppModel
     	$username = mysql_real_escape_string($username);
     	$password = mysql_real_escape_string($password);
     	
+    	$db = DB::conn();
+
+    	$user_account = $db->row('SELECT id, username, password FROM users WHERE username = ?', array($username));
     	$hashedPassword = self::getHashedPassword($username);
-    	$id = self::getId($username);
 
-    		
-    		if (self::verifyPassword($password, $hashedPassword)) {    
+    	if (!$user_account OR !self::verifyPassword($password,$hashedPassword)) {
+    		$this->user_validated = false;
+    		throw new RecordNotFoundException("Invalid Information");
+    	}
 
-    			session_start();
-    			$_SESSION['sid'] = session_id();
-    			redirect(url('users/index_end'));
-    		}
-    		else{    
-    			var_dump($password);
-    			var_dump($hashedPassword);			
-    			$this->user_validated = false;
-    			throw new RecordNotFoundException("No Record Found");
-    		}
+    	return new self($user_account);
     }
 
     public function logout()
@@ -117,10 +106,5 @@ class Users extends AppModel
     }
 
     
-public function redirect($url)
-    {        
-    	header('Location: '.$url);
-    	exit();
-    	
-    }
+
 }
