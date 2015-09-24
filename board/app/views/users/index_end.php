@@ -1,5 +1,6 @@
 <?php
     $username = $_SESSION['username'];
+    $id = $_SESSION['id'];
 ?>
 <!DOCTYPE html>
 <html>
