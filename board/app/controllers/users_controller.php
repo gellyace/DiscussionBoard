@@ -24,6 +24,7 @@ class UsersController extends AppController
                 	$user_account = $user->index($user);
                     session_start();
                     $_SESSION['username'] = $user_account->username;
+                    $_SESSION['id'] = $user_account->id;
 
                 } catch (RecordNotFoundException $e) {
                     $page=self::LOGIN_USER;
