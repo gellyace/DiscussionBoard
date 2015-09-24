@@ -1,23 +1,32 @@
 <?php
 class UsersController extends AppController
 {
+
+	const REGISTER_USER = 'register';
+	const REGISTER_END_USER = 'register_end';
+	const LOGIN_USER = 'index';
+	const LOGIN_END_USER = 'index_end';
+
     public function index() //login ~ index.php
     {   
-
     	$user = new Users;
-    	$page = Param::get('page_next', 'index');
-
+    	$page = Param::get('page_next', self::LOGIN_USER);
+    	
     	switch ($page) {
-    		case 'index':
+    		case self::LOGIN_USER:
     			break;
 
-    		case 'index_end':
+    		case self::LOGIN_END_USER:
     			$user->username = Param::get('username');                
                 $user->password=Param::get('password');
+                
                 try {
-                    $user->index($user);
-                } catch (ValidationException $e) {
-                    $page='index';
+                	$user_account = $user->index($user);
+                    session_start();
+                    $_SESSION['username'] = $user_account->username;
+
+                } catch (RecordNotFoundException $e) {
+                    $page=self::LOGIN_USER;
                 }
     			break;
 
@@ -32,13 +41,13 @@ class UsersController extends AppController
     public function register() 
     {
     	$user = new Users;
-        $page = Param::get('page_next', 'register');
+        $page = Param::get('page_next', self::REGISTER_USER);
 
         switch ($page) {
-            case 'register':
+            case self::REGISTER_USER:
                 break;
                 
-            case 'register_end':
+            case self::REGISTER_END_USER:
                 $user->username = Param::get('username');
                 $user->firstname=Param::get('firstname');
                 $user->lastname=Param::get('lastname');
@@ -47,7 +56,7 @@ class UsersController extends AppController
                 try {
                     $user->register($user);
                 } catch (ValidationException $e) {
-                    $page='register';
+                    $page=self::REGISTER_USER;
                 }
                     break;
 
