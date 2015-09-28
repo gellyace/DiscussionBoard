@@ -1,8 +1,35 @@
+<?php
+    session_start();
+?>
+
 <h2>Register</h2>
 
 <?php if ($user->hasError()): ?>
     <div class="alert alert-block">
         <h4 class="alert-heading">Validation error!</h4>
+            <!-- Generate Error Message if username contains characters other than numbers and letters -->
+            <?php if (!empty($user->validation_errors['username']['alphanumeric'])): ?>
+                <div><em>Username</em> must only contain alphanumeric (a-z, A-z, 0-9) characters.</div>
+            <? endif ?>
+            <!-- Generate Error Message if firstname or lastname contain characters other than letters and extra spaces -->
+            <?php if (!empty($user->validation_errors['firstname']['name'])): ?>
+                <div><em>Firstname</em> must only contain letters (a-z, A-z).</div>
+            <? endif ?>
+            <?php if (!empty($user->validation_errors['lastname']['name'])): ?>
+                <div><em>Lastname</em> must only contain letters (a-z, A-z).</div>
+            <? endif ?>
+            <!-- Generate Error Message if email address does not follow the alphanumeric@word.word format -->
+            <?php if (!empty($user->validation_errors['email']['format'])): ?>
+                <div><em>Email Address</em> must follow the proper (alphanumeric@word.word) format.</div>
+            <? endif ?>
+            <!-- Generate Error Message if username or email already exists -->
+            <?php if (!empty($user->validation_errors['username']['exists'])): ?>
+                <div><em>Username</em> already exists.</div>
+            <? endif ?>
+            <?php if (!empty($user->validation_errors['email']['exists'])): ?>
+                <div><em>Email</em> already exists.</div>
+            <? endif ?>
+            <!-- Generate Error Message if Textbox fields are empty -->
             <?php if (!empty($user->validation_errors['username']['length'])): ?>
                 <div><em>Username</em> must be between
                     <?php eh($user->validation['username']['length'][1]) ?> and
@@ -53,3 +80,6 @@
         <button type="submit" class="btn btn-primary"> Submit </button> 
     </div>
 </form>
+<a href="<?php eh(url('users/login')) ?>">
+    &larr; Login Page
+</a>

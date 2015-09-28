@@ -11,15 +11,21 @@ class Users extends AppModel
     public $validation = array(
         'username'=> array(
             'length' => array('validate_between',self::MIN_LENGTH, self::MAX_LENGTH),
+            'alphanumeric' => array('validate_alphanumeric'),
+            'exists' => array('validate_username_exists'),
         ),
         'firstname'=> array(
             'length' => array('validate_between', self::MIN_LENGTH, self::MAX_LENGTH),
+            'name' => array('validate_name'),
         ),
         'lastname'=> array(
             'length' => array('validate_between', self::MIN_LENGTH, self::MAX_LENGTH),
+            'name' => array('validate_name'),
         ),
         'email'=> array(
             'length' => array('validate_between', self::MIN_EMAIL_LENGTH, self::MAX_LENGTH),
+            'format' =>array('validate_email'),
+            'exists' => array('validate_email_exists'),
         ),
         'password'=> array(
             'length' => array('validate_between', self::MIN_PASSWORD_LENGTH, self::MAX_LENGTH),
@@ -83,5 +89,23 @@ class Users extends AppModel
         }
 
         return new self($user_account);
-    }   
+    }
+
+    public static function getUsername($username)
+    {
+        $db = DB::conn();
+
+        $row = $db->row('SELECT * FROM users WHERE username = ?', array($username));
+
+        return !$row ? false : new self($row);
+    } 
+
+    public static function getEmail($email)
+    {
+        $db = DB::conn();
+
+        $row = $db->row('SELECT * FROM users WHERE email = ?', array($email));
+
+        return !$row ? false : new self($row);
+    }  
 }

@@ -25,7 +25,7 @@ class Comment extends AppModel
     public static function countAll($thread_id)
     {
         $db = DB::conn();
-        return $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ?', array($thread_id));
+        return (int) $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ?', array($thread_id));
     }
      
     public function write($thread_id)

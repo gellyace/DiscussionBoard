@@ -20,3 +20,7 @@
     <input type="hidden" name="page_next" value="write_end">
     <button type="submit" class="btn btn-primary">Submit</button>                  
 </form> 
+<br><br>
+<a href="<?php eh(url('comment/view', array('thread_id'=>$thread->id))) ?>"> 
+    &larr; Back to thread
+</a>

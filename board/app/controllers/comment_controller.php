@@ -32,7 +32,7 @@ class CommentController extends AppController
             case 'write_end':
                 session_start();
                 $comment->username = $_SESSION['username'];
-                $comment->body = Param::get('body');
+                $comment->body = trim(Param::get('body'));
                 try {
                     $comment->write($thread->id);
                 } catch (ValidationException $e) {

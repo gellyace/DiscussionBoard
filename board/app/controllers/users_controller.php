@@ -16,8 +16,8 @@ class UsersController extends AppController
                 break;
 
             case self::LOGIN_END_USER:
-                $user->username = Param::get('username');                
-                $user->password=Param::get('password');
+                $user->username = trim(Param::get('username'));                
+                $user->password = trim(Param::get('password'));
                 try {
                     $user_account = $user->login($user);
                     session_start();
@@ -47,13 +47,16 @@ class UsersController extends AppController
                 break;
                 
             case self::REGISTER_END_USER:
-                $user->username = Param::get('username');
-                $user->firstname=Param::get('firstname');
-                $user->lastname=Param::get('lastname');
-                $user->email=Param::get('email');
-                $user->password=Param::get('password');
+                $user->username = trim(Param::get('username'));
+                $user->firstname = trim(Param::get('firstname'));
+                $user->lastname = trim(Param::get('lastname'));
+                $user->email = trim(Param::get('email'));
+                $user->password = trim(Param::get('password'));
                 try {
                     $user->register($user);
+                    session_start();
+                    $_SESSION['username'] = $user->username;
+                    $_SESSION['id'] = $user->id;
                 } catch (ValidationException $e) {
                     $page=self::REGISTER_USER;
                 }
@@ -69,8 +72,11 @@ class UsersController extends AppController
 
     public function logout()
     {
-        $this->Session->destroy();
-        $this->redirect($this->Auth->logout());
+        session_start();
+        session_unset($_SESSION);
+        session_destroy();
+        redirect('login');
+        exit();
     }
         
 }

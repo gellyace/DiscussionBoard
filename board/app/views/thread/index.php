@@ -37,5 +37,4 @@
 
 <br><br><br><br>
 <a class="btn btn-large btn-primary" href="<?php eh(url('thread/create')) ?>"> Create </a>
-<a class="btn btn-large btn-primary" href="<?php eh(url('users/login')) ?>"> Logout </a>
-
+<a class="btn btn-large btn-primary" href="<?php eh(url('users/logout')) ?>"> Logout </a>
