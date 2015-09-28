@@ -16,7 +16,7 @@
 
 <br><br>
 <?php if($pagination->current > 1): ?>
-    <a href='?page=<?php echo $pagination->prev ?>'>Previous</a>
+    <a href='?thread_id=<?php echo $thread->id ?>&page=<?php $pagination->prev ?>'>Previous</a>
 <?php else: ?>
     Previous
 <?php endif ?>
@@ -25,12 +25,12 @@
     <?php if($i == $page): ?>
         <?php echo $i ?>
     <?php else: ?>
-        <a href='?page=<?php echo $i ?>'><?php echo $i ?></a>
+        <a href='?thread_id=<?php echo $thread->id ?>&page=<?php echo $i ?>'><?php echo $i ?></a>
     <?php endif; ?>
 <?php endfor; ?>
 
 <?php if(!$pagination->is_last_page): ?>
-    <a href='?page=<?php echo $pagination->next ?>'>Next</a>
+    <a href='?thread_id=<?php echo $thread->id ?>&page=<?php $pagination->next ?>'>Next</a>
 <?php else: ?>
     Next
 <?php endif ?>
