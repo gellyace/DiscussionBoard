@@ -1,47 +1,45 @@
 <?php
 class UsersController extends AppController
 {
+    const REGISTER_USER = 'register';
+    const REGISTER_END_USER = 'register_end';
+    const LOGIN_USER = 'login';
+    const LOGIN_END_USER = 'login_end';
 
-	const REGISTER_USER = 'register';
-	const REGISTER_END_USER = 'register_end';
-	const LOGIN_USER = 'index';
-	const LOGIN_END_USER = 'index_end';
-
-    public function index() //login ~ index.php
+    public function login() 
     {   
-    	$user = new Users;
-    	$page = Param::get('page_next', self::LOGIN_USER);
-    	
-    	switch ($page) {
-    		case self::LOGIN_USER:
-    			break;
+        $user = new Users;
+        $page = Param::get('page_next', self::LOGIN_USER);
+        
+        switch ($page){
+            case self::LOGIN_USER:
+                break;
 
-    		case self::LOGIN_END_USER:
-    			$user->username = Param::get('username');                
+            case self::LOGIN_END_USER:
+                $user->username = Param::get('username');                
                 $user->password=Param::get('password');
-                
                 try {
-                	$user_account = $user->index($user);
+                    $user_account = $user->login($user);
                     session_start();
                     $_SESSION['username'] = $user_account->username;
                     $_SESSION['id'] = $user_account->id;
 
-                } catch (RecordNotFoundException $e) {
+                } catch (RecordNotFoundException $e){
                     $page=self::LOGIN_USER;
                 }
-    			break;
+                break;
 
-    		default:
-    			throw new RecordNotFoundException("{$page} is not found");
-    			break;
-    	}
-    		$this->set(get_defined_vars());
+            default:
+                throw new RecordNotFoundException("{$page} is not found");
+                break;
+        }
+            $this->set(get_defined_vars());
             $this->render($page);
     }
 
     public function register() 
     {
-    	$user = new Users;
+        $user = new Users;
         $page = Param::get('page_next', self::REGISTER_USER);
 
         switch ($page) {
@@ -59,7 +57,7 @@ class UsersController extends AppController
                 } catch (ValidationException $e) {
                     $page=self::REGISTER_USER;
                 }
-                    break;
+                break;
 
             default:
                 throw new RecordNotFoundException("{$page} is not found");                    
@@ -69,8 +67,10 @@ class UsersController extends AppController
             $this->render($page);
     }
 
-    
-    public function logout(){
-    	$this->redirect($this->Auth->logout());
+    public function logout()
+    {
+        $this->Session->destroy();
+        $this->redirect($this->Auth->logout());
     }
+        
 }

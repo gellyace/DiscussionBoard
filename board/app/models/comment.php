@@ -1,70 +1,41 @@
 <?php
-    
-    class Comment extends AppModel
-    {
-        const MIN_LENGTH = 1;
-        const MAX_LENGTH = 300;
+class Comment extends AppModel
+{
+    const MIN_LENGTH = 1;
+    const MAX_LENGTH = 300;
 
-
-        public $validation = array(
-            'body' => array(
-                'length' => array('validate_between', self::MIN_LENGTH , self::MAX_LENGTH),
-                ), 
-            );
-
+    public $validation = array(
+        'body' => array(
+            'length' => array('validate_between', self::MIN_LENGTH , self::MAX_LENGTH),
+        ), 
+    );
         
-        public static function getAll()
-        {
-            $threads = array();
+    public static function getAll($offset, $limit, $thread_id)
+    {
+        $comments = array();
+        $db = DB::conn();
+        $rows = $db->rows( sprintf("SELECT * FROM comment  WHERE thread_id = ? ORDER BY created LIMIT %d, %d", $offset, $limit), array($thread_id));
 
-            $db = DB::conn();
-
-            $rows = $db->rows('Select * FROM thread');
-
-            foreach ($rows as $row) {
-                $threads[] = new Thread($row);
-            }
-            return $threads;
+        foreach ($rows as $row) {
+            $comments[] = new self($row);
         }
-
-        public static function get($id)
-        {
-            $db = DB::conn();
-
-            $row = $db->row('SELECT * FROM thread WHERE id = ?', array($id));
-
-            if(!$row){
-                throw new RecordNotFoundException('No Record Found');
-            }
-            return new self($row);
-        }
-
-        public function getComments()
-        {
-            $comments = array();
-
-            $db = DB::conn();
-
-            $rows = $db->rows('SELECT * FROM comment WHERE thread_id = ? ORDER BY created ASC', 
-                                array($this->id));
-
-            foreach ($rows as $row) {
-                $comments[] = new Comment($row);
-            }
-            return $comments;
-        }
-
-        public function write($thread_id)
-        {
-            if(!$this->validate()){
-                throw new ValidationException("Invalid Comment");
-            }
-
-            $db = DB::conn();
-            $db->query('INSERT INTO comment SET thread_id = ?, username = ?, body = ?, created = NOW()', 
-                    array($thread_id, $this->username, $this->body));
-        }
-
-              
-    
+        return $comments;
     }
+       
+    public static function countAll($thread_id)
+    {
+        $db = DB::conn();
+        return $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ?', array($thread_id));
+    }
+     
+    public function write($thread_id)
+    {
+        if(!$this->validate()){
+            throw new ValidationException("Invalid Comment");
+        }
+
+        $db = DB::conn();
+        $db->query('INSERT INTO comment SET thread_id = ?, username = ?, body = ?, created = NOW()', 
+                    array($thread_id, $this->username, $this->body));
+    }
+}
