@@ -3,14 +3,14 @@ class ThreadController extends AppController
 {
     // Declare constants to avoid the use of "magic numbers"
     const PER_PAGE = 5;
-    const DEF_PAGE = 1;
+    const DEFAULT_PAGE = 1;
 
     const CREATE_THREAD = 'create';
     const CREATE_END_THREAD = 'create_end';
 
     public function index()
     {
-        $page = Param::get('page', self::DEF_PAGE);
+        $page = Param::get('page', self::DEFAULT_PAGE);
         $pagination = new SimplePagination($page, self::PER_PAGE);
 
         $threads = Thread::getAll($pagination->start_index-1, $pagination->count+1);

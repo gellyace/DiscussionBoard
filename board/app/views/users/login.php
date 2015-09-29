@@ -22,18 +22,19 @@
 <div id="header"> <h2>Welcome Guest</h2> </div>
     <form id="body" method="post" action="<?php char_to_html(url('')) ?>">
         <div id="rcorners2">
-            <label>Username</label>
-            <input type="text" class="span2" name="username" placeholder="username" value="<?php char_to_html(Param::get('username')) ?>" />
-            <label>Password</label>
-            <input type="password" class="span2" name="password" placeholder="password" value="<?php char_to_html(Param::get('password')) ?>" />
+            <span class="glyphicon glyphicon-user"></span><label> Username</label>
+            <input type="text" class="span2" name="username" placeholder="Username" value="<?php char_to_html(Param::get('username')) ?>" />
+            <br><span class="glyphicon glyphicon-lock"></span><label> Password</label>
+            <input type="password" class="span2" name="password" placeholder="Password" value="<?php char_to_html(Param::get('password')) ?>" />
             <br/>
-            <!-- Redirection to Welcome Page, if logging in is succesful-->     
+            <!-- Redirection to Welcome Page, if logging in is succesful  -->
             <input type="hidden" name="page_next" value="login_end">    
             <button type="submit" class="btn btn-primary"> Login </button>
             <br/><br/> 
-            <!-- Once hyperlink is clicked, will be redirected to Register Page-->
-            Don't have an account? <a href="<?php char_to_html(url('users/register')) ?>"> Register here </a>
+            <!-- Once hyperlink is clicked, will be redirected to Register Page -->
+            Don't have an account? <a href="<?php char_to_html(url('users/register')) ?>"> Register Here </a>
         </div>
     </form>
+ 
 </body>
 </html>

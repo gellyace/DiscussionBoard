@@ -14,8 +14,11 @@ class Comment extends AppModel
     {
         $comments = array();
         $db = DB::conn();
-        $rows = $db->rows( sprintf("SELECT * FROM comment  WHERE thread_id = ? ORDER BY created LIMIT %d, %d", $offset, $limit), array($thread_id));
-
+        $rows = $db->rows(
+            sprintf("SELECT * FROM comment WHERE thread_id=? LIMIT %d, %d", $offset, $limit),
+            array($thread_id)
+        );
+        
         foreach ($rows as $row) {
             $comments[] = new self($row);
         }

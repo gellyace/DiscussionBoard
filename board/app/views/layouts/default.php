@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <title>DietCake</title>
 
-    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="/css/forms.css" rel="stylesheet">
-    
+    <!--
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    -->
     <style>
       body {
         padding-top: 60px;
