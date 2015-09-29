@@ -9,7 +9,7 @@
 </head>
 <body>
     <h3>Welcome Back <?php echo $username ?> </h3>
-    <a href="<?php eh(url('thread/index')) ?>"> &larr; Thread Page </a>
+    <a href="<?php char_to_html(url('thread/index')) ?>"> &larr; Thread Page </a>
 </body>
 </html>
 

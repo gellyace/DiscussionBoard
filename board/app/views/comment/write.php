@@ -1,26 +1,26 @@
-<h2> <?php eh($thread->title) ?> </h2>
+<h2> <?php char_to_html($thread->title) ?> </h2>
            
 <?php if ($comment->hasError()): ?>
     <div class="alert alert-block">   
         <h4 class="alert-heading">Validation error!</h4>
         <?php if (!empty($comment->validation_errors['body']['length'])): ?>                
             <div><em>Comment</em> must be between 
-                <?php eh($comment->validation['body']['length'][1]) ?>  and                    
-                <?php eh($comment->validation['body']['length'][2]) ?> characters in length.
+                <?php char_to_html($comment->validation['body']['length'][1]) ?>  and                    
+                <?php char_to_html($comment->validation['body']['length'][2]) ?> characters in length.
             </div>            
         <?php endif ?>
     </div>                    
 <?php endif ?>
         
-<form class="well" method="post" action="<?php eh(url('comment/write')) ?>">
+<form class="well" method="post" action="<?php char_to_html(url('comment/write')) ?>">
     <label>Comment</label>
-        <textarea name="body" placeholder = "comment" value="<?php eh(Param::get('body')) ?>"></textarea>
+        <textarea name="body" placeholder = "comment" value="<?php char_to_html(Param::get('body')) ?>"></textarea>
     <br />
-    <input type="hidden" name="thread_id" value="<?php eh($thread->id) ?>">
+    <input type="hidden" name="thread_id" value="<?php char_to_html($thread->id) ?>">
     <input type="hidden" name="page_next" value="write_end">
     <button type="submit" class="btn btn-primary">Submit</button>                  
 </form> 
 <br><br>
-<a href="<?php eh(url('comment/view', array('thread_id'=>$thread->id))) ?>"> 
+<a href="<?php char_to_html(url('comment/view', array('thread_id'=>$thread->id))) ?>"> 
     &larr; Back to thread
 </a>

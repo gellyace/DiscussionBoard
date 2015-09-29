@@ -1,27 +1,33 @@
 <?php
-function validate_between($check, $min, $max) {
+function validate_between($check, $min, $max)
+{
+	$check = trim($check);
     $n = mb_strlen($check);
 	return $min <= $n && $n <= $max;
 }
 
-function validate_name($check) {
-    return preg_match('/^[a-zA-Z ]*$/', $check);
+function validate_name($name)
+{
+    return preg_match('/^[a-zA-Z ]*$/', $name);
 }
 
-function validate_alphanumeric($check) {
+function validate_alphanumeric($check)
+{
     return preg_match('/^[_a-zA-Z0-9]+$/', $check);
 }
 
-function validate_email($check) {
-    return preg_match('/^[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,4}$/', $check);
+function validate_email($email)
+{
+    return preg_match('/^[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,4}$/', $email);
 }
 
-function validate_username_exists($check) {
-    return !Users::getUsername($check);
+function username_exists($username)
+{
+    return !Users::getUsername($username);
 }
 
-function validate_email_exists($check) {
-    return !Users::getEmail($check);
+function email_exists($email)
+{
+    return !Users::getEmail($email);
 }
-
-    
+ 

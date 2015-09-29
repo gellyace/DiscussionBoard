@@ -1,41 +1,40 @@
 <?php
 class Users extends AppModel
 {
-    const MIN_LENGTH = 1;   
+    const MIN_DETAILS_LENGTH = 1;   
     const MIN_PASSWORD_LENGTH = 6;
     const MIN_EMAIL_LENGTH = 11;
-    const MAX_LENGTH = 30;
+    const MAX_DETAILS_LENGTH = 30;
 
     public $user_validated = true;
-
     public $validation = array(
         'username'=> array(
-            'length' => array('validate_between',self::MIN_LENGTH, self::MAX_LENGTH),
+            'length' => array('validate_between',self::MIN_DETAILS_LENGTH, self::MAX_DETAILS_LENGTH),
             'alphanumeric' => array('validate_alphanumeric'),
-            'exists' => array('validate_username_exists'),
+            'exists' => array('username_exists'),
         ),
         'firstname'=> array(
-            'length' => array('validate_between', self::MIN_LENGTH, self::MAX_LENGTH),
+            'length' => array('validate_between', self::MIN_DETAILS_LENGTH, self::MAX_DETAILS_LENGTH),
             'name' => array('validate_name'),
         ),
         'lastname'=> array(
-            'length' => array('validate_between', self::MIN_LENGTH, self::MAX_LENGTH),
+            'length' => array('validate_between', self::MIN_DETAILS_LENGTH, self::MAX_DETAILS_LENGTH),
             'name' => array('validate_name'),
         ),
         'email'=> array(
-            'length' => array('validate_between', self::MIN_EMAIL_LENGTH, self::MAX_LENGTH),
+            'length' => array('validate_between', self::MIN_EMAIL_LENGTH, self::MAX_DETAILS_LENGTH),
             'format' =>array('validate_email'),
-            'exists' => array('validate_email_exists'),
+            'exists' => array('email_exists'),
         ),
         'password'=> array(
-            'length' => array('validate_between', self::MIN_PASSWORD_LENGTH, self::MAX_LENGTH),
+            'length' => array('validate_between', self::MIN_PASSWORD_LENGTH, self::MAX_DETAILS_LENGTH),
         )
     );
     
     // Encrypts the submitted password of the user using the Blowfish Algorithm
     public function generateHash($password)
     {
-        if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH){
+        if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH) {
             $salt = '$2y$11$'.substr(md5(uniqid(rand(), true)), 0, 22);
             return crypt($password, $salt);
         }
@@ -43,8 +42,9 @@ class Users extends AppModel
 
     public function verifyPassword($userPassword, $hashedPassword)
     {       
-        if(crypt($userPassword, $hashedPassword) == $hashedPassword) 
+        if(crypt($userPassword, $hashedPassword) == $hashedPassword) {
             return true;
+        }
     }
 
     public function getHashedPassword($username)
@@ -56,17 +56,25 @@ class Users extends AppModel
     
     public function register(Users $user)
     {
-        if (!$this->validate())                   
+        if (!$this->validate()) {
             throw new ValidationException('Registration not valid');
+        }
 
         $hashedPassword = self::generateHash($this->password); //encrypts password before storing it
 
         $db = DB::conn();
         $db->begin();
 
-        $db->query('INSERT INTO users SET username = ?, firstname = ?, lastname = ?, email = ?, password = ?, created = NOW()', array($user->username, $user->firstname, $user->lastname, $user->email, $hashedPassword));
-        $this->id = $db->lastInsertId();  
-        
+        $params = array(
+            'username' => $this->username,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'password' => $hashedPassword,
+            'created' => date("Y-m-d H:i:s")
+        );
+
+        $db->insert('users', $params);
         $db->commit();
     }
 
@@ -83,7 +91,7 @@ class Users extends AppModel
         $user_account = $db->row('SELECT id, username, password FROM users WHERE username = ?', array($username));
         $hashedPassword = self::getHashedPassword($username);
 
-        if (!$user_account OR !self::verifyPassword($password, $hashedPassword)){
+        if (!$user_account OR !self::verifyPassword($password, $hashedPassword)) {
             $this->user_validated = false;
             throw new RecordNotFoundException("Invalid Information");
         }

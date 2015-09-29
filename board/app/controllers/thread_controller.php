@@ -1,11 +1,16 @@
 <?php
 class ThreadController extends AppController 
 {
+    // Declare constants to avoid the use of "magic numbers"
     const PER_PAGE = 5;
+    const DEF_PAGE = 1;
+
+    const CREATE_THREAD = 'create';
+    const CREATE_END_THREAD = 'create_end';
 
     public function index()
     {
-        $page = Param::get('page', 1);
+        $page = Param::get('page', self::DEF_PAGE);
         $pagination = new SimplePagination($page, self::PER_PAGE);
 
         $threads = Thread::getAll($pagination->start_index-1, $pagination->count+1);
@@ -19,24 +24,23 @@ class ThreadController extends AppController
                
     public function create()
     {
-        $thread = new Thread;
-        $comment = new Comment;
-        $page = Param::get('page_next', 'create');
+        $thread = new Thread();
+        $comment = new Comment();
+        $page = Param::get('page_next', self::CREATE_THREAD);
 
         switch ($page) {
-            case 'create':
+            case self::CREATE_THREAD:
                 break;
                 
-            case 'create_end':
+            case self::CREATE_END_THREAD:
                 session_start();
-                    
-                $thread->title = trim(Param::get('title'));
+                $thread->title = Param::get('title');
                 $comment->username = $_SESSION['username'];
-                $comment->body = trim(Param::get('body'));                
+                $comment->body = Param::get('body');                
                 try {
                     $thread->create($comment);
                 } catch (ValidationException $e) {
-                    $page='create';
+                    $page = self::CREATE_THREAD;
                 }
                 break;
 

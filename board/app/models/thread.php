@@ -1,12 +1,12 @@
 <?php
 class Thread extends AppModel
 {
-    const MIN_LENGTH = 1;
-    const MAX_LENGTH = 30;
+    const MIN_TITLE_LENGTH = 1;
+    const MAX_TITLE_LENGTH = 30;
 
     public $validation = array(
         'title'=> array(
-            'length' => array('validate_between', self::MIN_LENGTH, self::MAX_LENGTH),
+            'length' => array('validate_between', self::MIN_TITLE_LENGTH, self::MAX_TITLE_LENGTH),
         ),
     );
 
@@ -26,7 +26,7 @@ class Thread extends AppModel
     public static function countAll()
     {
         $db = DB::conn();
-        return (int) $db->value('SELECT COUNT(*) FROM thread');
+        return $db->value('SELECT COUNT(*) FROM thread');
     }
 
     public static function get($id)
@@ -53,14 +53,17 @@ class Thread extends AppModel
                     
         $db = DB::conn();
         $db->begin();
-           
-        $db->query('INSERT INTO thread SET title = ?, created = NOW()', array($this->title));
+        
+        $params = array(
+            'title' => $this->title,
+            'created' => date("Y-m-d H:i:s")
+        );
 
-        $this->id = $db->lastInsertId();
-                    
+        $db->insert('thread', $params);
+        $this->id = $db->lastInsertId(); 
+
         // write first comment at the same time
         $comment->write($this->id);
-                    
         $db->commit();
     }        
 }

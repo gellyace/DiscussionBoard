@@ -31,7 +31,7 @@
     </div>
 
     <script>
-    console.log(<?php eh(round(microtime(true) - TIME_START, 3)) ?> + 'sec');
+    console.log(<?php char_to_html(round(microtime(true) - TIME_START, 3)) ?> + 'sec');
     </script>
 
   </body>

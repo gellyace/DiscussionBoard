@@ -6,29 +6,29 @@
         <h4 class="alert-warning">Validation error!</h4>
             <?php if (!empty($thread->validation_errors['title']['length'])): ?>
                 <div><em>Title</em> must be between
-                    <?php eh($thread->validation['title']['length'][1]) ?> and
-                    <?php eh($thread->validation['title']['length'][2]) ?> characters in length.
+                    <?php char_to_html($thread->validation['title']['length'][1]) ?> and
+                    <?php char_to_html($thread->validation['title']['length'][2]) ?> characters in length.
                 </div>
             <? endif ?>
             <?php if (!empty($comment->validation_errors['body']['length'])): ?>
                 <div><em>Comment</em> must be between
-                    <?php eh($comment->validation['body']['length'][1]) ?> and
-                    <?php eh($comment->validation['body']['length'][2]) ?> characters in length.
+                    <?php char_to_html($comment->validation['body']['length'][1]) ?> and
+                    <?php char_to_html($comment->validation['body']['length'][2]) ?> characters in length.
                 </div>
             <? endif ?>    
     </div>
 <? endif ?> 
 
-<form class="well" method="post" action="<?php eh(url('')) ?>">
+<form class="well" method="post" action="<?php char_to_html(url('')) ?>">
     <label>Title</label>
-        <input type="text" class="span2" name="title" placeholder="title" value="<?php eh(Param::get('title')) ?>">
+        <input type="text" class="span2" name="title" placeholder="title" value="<?php char_to_html(Param::get('title')) ?>">
     <label>Comment</label>
-        <textarea name="body" placeholder="comment" value="<?php eh(Param::get('body')) ?>"></textarea>
+        <textarea name="body" placeholder="comment" value="<?php char_to_html(Param::get('body')) ?>"></textarea>
     <br/>
     <input type="hidden" name="page_next" value="create_end">
     <button type="submit" class="btn btn-primary"> Submit </button>
 </form>
 
-<a href="<?php eh(url('thread/index', array('thread_id' => $thread->id))) ?>">
+<a href="<?php char_to_html(url('thread/index', array('thread_id' => $thread->id))) ?>">
     &larr; Go to thread
 </a>

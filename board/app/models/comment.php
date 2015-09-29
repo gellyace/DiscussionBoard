@@ -1,12 +1,12 @@
 <?php
 class Comment extends AppModel
 {
-    const MIN_LENGTH = 1;
-    const MAX_LENGTH = 300;
+    const MIN_COMMENT_LENGTH = 1;
+    const MAX_COMMENT_LENGTH = 300;
 
     public $validation = array(
         'body' => array(
-            'length' => array('validate_between', self::MIN_LENGTH , self::MAX_LENGTH),
+            'length' => array('validate_between', self::MIN_COMMENT_LENGTH , self::MAX_COMMENT_LENGTH),
         ), 
     );
         
@@ -25,7 +25,7 @@ class Comment extends AppModel
     public static function countAll($thread_id)
     {
         $db = DB::conn();
-        return (int) $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ?', array($thread_id));
+        return $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ?', array($thread_id));
     }
      
     public function write($thread_id)
@@ -35,7 +35,15 @@ class Comment extends AppModel
         }
 
         $db = DB::conn();
-        $db->query('INSERT INTO comment SET thread_id = ?, username = ?, body = ?, created = NOW()', 
-                    array($thread_id, $this->username, $this->body));
+        
+        $params = array(
+            'thread_id' => $thread_id,
+            'username' => $this->username,
+            'body' => $this->body,
+            'created' => date("Y-m-d H:i:s")
+        );
+
+        $db->insert('comment', $params);
+        $db->commit();
     }
 }

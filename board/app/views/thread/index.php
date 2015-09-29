@@ -8,8 +8,8 @@
 <ul>
     <?php foreach ($threads as $v): ?>
     <li>
-        <a href="<?php eh(url('comment/view', array('thread_id' => $v->id))) ?>">
-        <?php eh($v->title) ?></a>        
+        <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
+        <?php char_to_html($v->title) ?></a>        
     </li>
     <?php endforeach ?>
 </ul>
@@ -36,5 +36,5 @@
 <?php endif ?>
 
 <br><br><br><br>
-<a class="btn btn-large btn-primary" href="<?php eh(url('thread/create')) ?>"> Create </a>
-<a class="btn btn-large btn-primary" href="<?php eh(url('users/logout')) ?>"> Logout </a>
+<a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/create')) ?>"> Create </a>
+<a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/logout')) ?>"> Logout </a>

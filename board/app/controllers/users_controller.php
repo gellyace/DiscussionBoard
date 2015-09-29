@@ -1,6 +1,7 @@
 <?php
 class UsersController extends AppController
 {
+    // Declare constants to avoid the use of "magic numbers"
     const REGISTER_USER = 'register';
     const REGISTER_END_USER = 'register_end';
     const LOGIN_USER = 'login';
@@ -8,7 +9,7 @@ class UsersController extends AppController
 
     public function login() 
     {   
-        $user = new Users;
+        $user = new Users();
         $page = Param::get('page_next', self::LOGIN_USER);
         
         switch ($page){
@@ -16,14 +17,13 @@ class UsersController extends AppController
                 break;
 
             case self::LOGIN_END_USER:
-                $user->username = trim(Param::get('username'));                
-                $user->password = trim(Param::get('password'));
+                $user->username = Param::get('username');                
+                $user->password = Param::get('password');
                 try {
                     $user_account = $user->login($user);
                     session_start();
                     $_SESSION['username'] = $user_account->username;
                     $_SESSION['id'] = $user_account->id;
-
                 } catch (RecordNotFoundException $e){
                     $page=self::LOGIN_USER;
                 }
@@ -39,7 +39,7 @@ class UsersController extends AppController
 
     public function register() 
     {
-        $user = new Users;
+        $user = new Users();
         $page = Param::get('page_next', self::REGISTER_USER);
 
         switch ($page) {
@@ -47,11 +47,11 @@ class UsersController extends AppController
                 break;
                 
             case self::REGISTER_END_USER:
-                $user->username = trim(Param::get('username'));
-                $user->firstname = trim(Param::get('firstname'));
-                $user->lastname = trim(Param::get('lastname'));
-                $user->email = trim(Param::get('email'));
-                $user->password = trim(Param::get('password'));
+                $user->username = Param::get('username');
+                $user->firstname = Param::get('firstname');
+                $user->lastname = Param::get('lastname');
+                $user->email = Param::get('email');
+                $user->password = Param::get('password');
                 try {
                     $user->register($user);
                     session_start();
@@ -77,6 +77,5 @@ class UsersController extends AppController
         session_destroy();
         redirect('login');
         exit();
-    }
-        
+    }  
 }
