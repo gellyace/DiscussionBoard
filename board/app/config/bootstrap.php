@@ -42,7 +42,7 @@ function set_session_username($username)
 
 function get_session_username()
 {
-	if(!isset($_SESSION)) 
+    if(!isset($_SESSION)) 
     { 
         session_start(); 
     } 
