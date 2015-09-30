@@ -1,7 +1,3 @@
-<?php
-    session_start();
-?>
-
 <h2>Register</h2>
 
 <?php if ($user->hasError()): ?>

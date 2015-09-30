@@ -52,9 +52,7 @@ class UsersController extends AppController
                 $user->password = Param::get('password');
                 try {
                     $user->register($user);
-                    session_start();
-                    $_SESSION['username'] = $user->username;
-                    $_SESSION['id'] = $user->id;
+                    set_session_username($user->username);
                 } catch (ValidationException $e) {
                     $page=self::REGISTER_USER;
                 }

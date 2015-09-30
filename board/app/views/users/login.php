@@ -1,11 +1,10 @@
-<?php
-    session_start();
-?>
-
 <!DOCTYPE html>
 <html>
 <head> 
     <title>Login Page</title>
+    <link href="/custom/css/login_register.css" rel="stylesheet">
+    <script type="/custom/js/index.js"></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 </head>
 <body>
 
@@ -20,6 +19,8 @@
 <?php endif ?>
 
 
+
+        
 <h2 class="header login">Welcome Guest</h2>
 <form class="form-horizontal" role="form" action="<?php char_to_html(url('')) ?>" method="post">
     <div class="well span6">   
