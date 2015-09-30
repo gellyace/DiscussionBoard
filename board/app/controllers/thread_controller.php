@@ -10,6 +10,7 @@ class ThreadController extends AppController
 
     public function index()
     {
+        check_user_session(get_session_username());
         $page = Param::get('page', self::DEFAULT_PAGE);
         $pagination = new SimplePagination($page, self::PER_PAGE);
 
@@ -24,6 +25,7 @@ class ThreadController extends AppController
                
     public function create()
     {
+        check_user_session(get_session_username());
         $thread = new Thread();
         $comment = new Comment();
         $page = Param::get('page_next', self::CREATE_THREAD);
@@ -34,6 +36,7 @@ class ThreadController extends AppController
                 
             case self::CREATE_END_THREAD:
                 $thread->title = Param::get('title');
+                //set_session_username($$_SESSION['username']);
                 $comment->username = get_session_username();
                 $comment->body = Param::get('body');                
                 try {

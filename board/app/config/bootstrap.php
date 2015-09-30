@@ -42,9 +42,22 @@ function set_session_username($username)
 
 function get_session_username()
 {
-	 if(!isset($_SESSION)) 
+	if(!isset($_SESSION)) 
     { 
         session_start(); 
     } 
     return $username = $_SESSION['username'];
+}
+
+function check_user_session($username)
+{
+    if((isset($_SESSION['username']) == $username) && ($username!=null)) 
+    {   
+    }
+    if(!isset($_SESSION['username'])) {
+        session_start();
+        session_destroy();
+        redirect('/users/login');
+        exit();
+    }
 }

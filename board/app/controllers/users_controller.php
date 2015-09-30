@@ -10,8 +10,8 @@ class UsersController extends AppController
     public function login() 
     {   
         $user = new Users();
-        $page = Param::get('page_next', self::LOGIN_USER);
-        
+        $page = Param::get('page_next', self::LOGIN_USER);      
+
         switch ($page){
             case self::LOGIN_USER:
                 break;
@@ -39,7 +39,8 @@ class UsersController extends AppController
     {
         $user = new Users();
         $page = Param::get('page_next', self::REGISTER_USER);
-
+        
+        
         switch ($page) {
             case self::REGISTER_USER:
                 break;
@@ -68,6 +69,7 @@ class UsersController extends AppController
 
     public function logout()
     {
+        session_start();
         session_destroy();
         redirect('login');
         exit();
