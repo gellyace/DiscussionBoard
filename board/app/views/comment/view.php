@@ -1,8 +1,3 @@
-<?php
-    session_start();
-    $username = $_SESSION['username'];
-?>
-
 <h1> <?php char_to_html($thread->title) ?> </h1>
 
 <?php foreach($comments as $k=>$v): ?>

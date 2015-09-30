@@ -19,22 +19,35 @@
 </div>
 <?php endif ?>
 
-<div id="header"> <h2>Welcome Guest</h2> </div>
-    <form id="body" method="post" action="<?php char_to_html(url('')) ?>">
-        <div id="rcorners2">
-            <span class="glyphicon glyphicon-user"></span><label> Username</label>
-            <input type="text" class="span2" name="username" placeholder="Username" value="<?php char_to_html(Param::get('username')) ?>" />
-            <br><span class="glyphicon glyphicon-lock"></span><label> Password</label>
-            <input type="password" class="span2" name="password" placeholder="Password" value="<?php char_to_html(Param::get('password')) ?>" />
-            <br/>
-            <!-- Redirection to Welcome Page, if logging in is succesful  -->
-            <input type="hidden" name="page_next" value="login_end">    
-            <button type="submit" class="btn btn-primary"> Login </button>
-            <br/><br/> 
-            <!-- Once hyperlink is clicked, will be redirected to Register Page -->
-            Don't have an account? <a href="<?php char_to_html(url('users/register')) ?>"> Register Here </a>
+
+<h2 class="header login">Welcome Guest</h2>
+<form class="form-horizontal" role="form" action="<?php char_to_html(url('')) ?>" method="post">
+    <div class="well span6">   
+    <div class="control-group">
+        <label class="control-label col-sm-2" for="name"><span class="glyphicon glyphicon-user"></span> Username:</label>
+        <div class="control">
+            <input type="text" name="username" placeholder="Enter username" value="<?php char_to_html(Param::get('username')) ?>" required>
         </div>
-    </form>
- 
+    </div>
+
+    <div class="control-group">
+        <label class="control-label col-sm-2"> <span class="glyphicon glyphicon-lock"></span> Password:</label>
+        <div class="control">
+            <input type="password" name="password" placeholder="Enter password" value="<?php char_to_html(Param::get('password')) ?>" required>
+        </div>
+    </div>
+  
+    <div class="control-group">
+        <div class="col-sm-offset-5">
+            <input type="hidden" name="page_next" value="login_end">
+            <button type="submit" class="btn btn-info">Login</button>
+        </div>
+    </div>
+    <hr> 
+    Don't have an account? <a href="<?php char_to_html(url('users/register')) ?>"> Register Here </a>
+   </div>
+</form>
+
+
 </body>
 </html>

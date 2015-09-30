@@ -35,8 +35,7 @@ class CommentController extends AppController
                 break;
 
             case self::WRITE_END_COMMENT:
-                session_start();
-                $comment->username = $_SESSION['username'];
+                $comment->username = get_session_username();
                 $comment->body = Param::get('body');
                 try {
                     $comment->write($thread->id);

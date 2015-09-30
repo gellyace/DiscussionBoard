@@ -3,11 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>DietCake</title>
-
+    
+    <script type="/bootstrap/js/bootstrap.js"></script>
     <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/forms.css" rel="stylesheet">
-    <!--
+      
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!--
+    <link href="/custom/css/login_register.css" rel="stylesheet">
     -->
     <style>
       body {
@@ -17,11 +20,10 @@
   </head>
 
   <body>
-
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="#">DietCake Hello</a>
+          <a class="brand" href="#">DietCake Board Exercises</a>
         </div>
       </div>
     </div>

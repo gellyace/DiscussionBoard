@@ -30,3 +30,15 @@ spl_autoload_register(function($name) {
         }
     }
 });
+
+function set_session_username($username)
+{
+    session_start();
+    $_SESSION['username'] = $username;
+}
+
+function get_session_username()
+{
+	session_start();
+    return $username = $_SESSION['username'];
+}

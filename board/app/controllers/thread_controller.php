@@ -33,9 +33,8 @@ class ThreadController extends AppController
                 break;
                 
             case self::CREATE_END_THREAD:
-                session_start();
                 $thread->title = Param::get('title');
-                $comment->username = $_SESSION['username'];
+                $comment->username = get_session_username();
                 $comment->body = Param::get('body');                
                 try {
                     $thread->create($comment);

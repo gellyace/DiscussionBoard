@@ -21,9 +21,7 @@ class UsersController extends AppController
                 $user->password = Param::get('password');
                 try {
                     $user_account = $user->login($user);
-                    session_start();
-                    $_SESSION['username'] = $user_account->username;
-                    $_SESSION['id'] = $user_account->id;
+                    set_session_username($user_account->username);
                 } catch (RecordNotFoundException $e){
                     $page=self::LOGIN_USER;
                 }
@@ -72,8 +70,6 @@ class UsersController extends AppController
 
     public function logout()
     {
-        session_start();
-        session_unset($_SESSION);
         session_destroy();
         redirect('login');
         exit();

@@ -1,8 +1,3 @@
-<?php
-    session_start();
-    $username = $_SESSION['username'];
-?>
-
 <h1>All threads</h1>
 
 <ul>

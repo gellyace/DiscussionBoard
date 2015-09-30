@@ -9,7 +9,7 @@ label {
     text-align: center;
 }
 
-#rcorners2  {
+#container center  {
     border-radius: 15px 50px;
     border: 2px solid #044F67;
     padding: 20px;
@@ -23,4 +23,22 @@ label {
     text-align: center;
 }
 
+#pre labels
+{
+    tab-size: 8;
+}
+
+#center
+{
+    position: fixed; /* or absolute if you want it to scroll with the page */
+  top: 50%;
+ left: 50%;
+  width: 600px;
+  height: 300px;
+  border: solid;
+  background-color: whitesmoke;
+  
+ margin-top: -150px;
+  margin-left: -300px;
+}
 
