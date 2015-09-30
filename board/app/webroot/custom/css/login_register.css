@@ -2,15 +2,16 @@
 
 }
 label {
-	color: black;
-}
-#header {
-	text-align: center;
+    color: black;
 }
 
-#rcorners2 {
+#header  {
+    text-align: center;
+}
+
+#rcorners2  {
     border-radius: 15px 50px;
-    border: 2px solid #8AC007;
+    border: 2px solid #044F67;
     padding: 20px;
     width: 200px;
     height: 150px;
@@ -19,5 +20,7 @@ label {
 }
 
 #body {
-	text-align: center;
+    text-align: center;
 }
+
+
