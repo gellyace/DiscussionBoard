@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html class="thread_create">
+<head>
+    <title></title>
+</head>
+<body class="thread_create">
+
 <h1> Create a thread</h1>
 
 <?php if ($thread->hasError() || $comment->hasError()): ?>
@@ -19,9 +26,9 @@
 <? endif ?> 
 
 <form class="well" method="post" action="<?php char_to_html(url('')) ?>">
-    <label>Title</label>
+    <label class="form">Title</label>
         <input type="text" class="span2" name="title" placeholder="title" value="<?php char_to_html(Param::get('title')) ?>">
-    <label>Comment</label>
+    <label class="form">Comment</label>
         <textarea name="body" placeholder="comment" value="<?php char_to_html(Param::get('body')) ?>"></textarea>
     <br/>
     <input type="hidden" name="page_next" value="create_end">
@@ -31,3 +38,6 @@
 <a href="<?php char_to_html(url('thread/index', array('thread_id' => $thread->id))) ?>">
     &larr; Go to thread
 </a>
+
+</body>
+</html>

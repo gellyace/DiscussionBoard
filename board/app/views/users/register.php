@@ -1,7 +1,8 @@
-<h2>Register</h2>
-
+<!-- Validation Errors Block-->
 <?php if ($user->hasError()): ?>
-    <div class="alert alert-block">
+<div class="col-md-4 col-md-offset-6">
+    <div class="alert alert-danger alert-block fade in alert-dismissable" style="width: 530px">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4 class="alert-heading">Validation error!</h4>
             <!-- Generate Error Message if username contains characters other than numbers and letters -->
             <?php if (!empty($user->validation_errors['username']['alphanumeric'])): ?>
@@ -19,10 +20,10 @@
                 <div><em>Email Address</em> must follow the proper (alphanumeric@word.word) format.</div>
             <? endif ?>
             <!-- Generate Error Message if username or email already exists -->
-            <?php if (!empty($user->validation_errors['username']['exists'])): ?>
+            <?php if (!empty($user->validation_errors['username']['exists_username'])): ?>
                 <div><em>Username</em> already exists.</div>
             <? endif ?>
-            <?php if (!empty($user->validation_errors['email']['exists'])): ?>
+            <?php if (!empty($user->validation_errors['email']['exists_email'])): ?>
                 <div><em>Email</em> already exists.</div>
             <? endif ?>
             <!-- Generate Error Message if Textbox fields are empty -->
@@ -57,25 +58,41 @@
                 </div>
             <? endif ?>
     </div>
+</div>
 <? endif ?> 
 
-<form name="login" method="post" action="<?php char_to_html(url('')) ?>">
-    <div>
-        <label>First Name</label>
-            <input type="text" class="span2" name="firstname" placeholder="Frist Name" value="<?php char_to_html(Param::get('firstname')) ?>">
-        <label>Last Name</label> 
-            <input type="text" class="span2" name="lastname" placeholder="Last Name" value="<?php char_to_html(Param::get('lastname')) ?>">
-        <label>Username</label> 
-            <input type="text" class="span2" name="username" placeholder="Username" value="<?php char_to_html(Param::get('username')) ?>">
-        <label>Email Address</label> 
-            <input type="text" class="span3" name="email" placeholder="email@something.something" value="<?php char_to_html(Param::get('emailaddress')) ?>">
-        <label>Password</label> 
-            <input type="password" class="span2" name="password" placeholder="Password" value="<?php char_to_html(Param::get('password')) ?>">
-        <br/>
-        <input type="hidden" name="page_next" value="register_end">
-        <button type="submit" class="btn btn-primary"> Submit </button> 
+<!-- Form Block -->
+<div class="row">
+    <div class="col-md-3 col-md-offset-4">
+        <div class="form-group">
+            <fieldset>
+            <legend class="form_legend">Register</legend>
+            <form class="well span4" role="form" name="login" action="<?php char_to_html(url('')) ?>" method="post">
+                <label class="form"><span class="glyphicon glyphicon-user"></span>  First Name:</label><br>
+                    <input type="text" name="firstname" placeholder="Enter firstname" value="<?php char_to_html(Param::get('firstname')) ?>" required>
+                <hr>
+                <label class="form"><span class="glyphicon glyphicon-user"></span>  Last Name:</label><br>
+                    <input type="text" name="lastname" placeholder="Enter lastname" value="<?php char_to_html(Param::get('lastname')) ?>" required>
+                <hr>
+                <label class="form"><span class="glyphicon glyphicon-user"></span>  Username:</label><br>
+                    <input type="text" name="username" placeholder="Enter username" value="<?php char_to_html(Param::get('username')) ?>" required>
+                <hr>
+                <label class="form"><span class="glyphicon glyphicon-email"></span>  Email Address:</label><br>
+                    <input type="text" name="email" placeholder="Enter email" value="<?php char_to_html(Param::get('email')) ?>" required>
+                <hr>
+                <label class="form"><span class="glyphicon glyphicon-lock"></span>  Password:</label><br>
+                    <input type="password" name="password" placeholder="Enter password" value="<?php char_to_html(Param::get('password')) ?>" required>
+                <hr>
+                <div class="col-sm-offset-4">
+                    <input type="hidden" name="page_next" value="register_end">
+                    <button type="submit" class="btn">Submit</button>
+                </div>
+                <br>
+                <div class="col-sm-offset-2">
+                    <label class="form_link">Back to <a class="form_link" href="<?php char_to_html(url('users/login')) ?>"> &larr; Login Page </a></label>
+                </div>
+            </form>
+            </fieldset>
+        </div>
     </div>
-</form>
-<a href="<?php char_to_html(url('users/login')) ?>">
-    &larr; Login Page
-</a>
+</div>

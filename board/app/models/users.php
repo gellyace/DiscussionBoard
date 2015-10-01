@@ -11,7 +11,7 @@ class Users extends AppModel
         'username'=> array(
             'length' => array('validate_between',self::MIN_DETAILS_LENGTH, self::MAX_DETAILS_LENGTH),
             'alphanumeric' => array('validate_alphanumeric'),
-            'exists' => array('username_exists'),
+            'exists_username' => array('username_exists'),
         ),
         'firstname'=> array(
             'length' => array('validate_between', self::MIN_DETAILS_LENGTH, self::MAX_DETAILS_LENGTH),
@@ -24,7 +24,7 @@ class Users extends AppModel
         'email'=> array(
             'length' => array('validate_between', self::MIN_EMAIL_LENGTH, self::MAX_DETAILS_LENGTH),
             'format' =>array('validate_email'),
-            'exists' => array('email_exists'),
+            'exists_email' => array('email_exists'),
         ),
         'password'=> array(
             'length' => array('validate_between', self::MIN_PASSWORD_LENGTH, self::MAX_DETAILS_LENGTH),
