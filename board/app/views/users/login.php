@@ -4,7 +4,7 @@
     <title>Login Page</title>
 </head>
 <body>
-
+<!-- Validation Errors Block-->
 <?php if(!$user->user_validated): ?>
 <div class="row_alert">
     <div class="col-md-4 col-md-offset-8">
@@ -15,7 +15,7 @@
     </div>
 </div>
 <?php endif ?>
-
+<!-- Form Block -->
 <div class="row">
     <div class="col-md-3 col-md-offset-4">
         <div class="form-group">

@@ -16,6 +16,7 @@
     </ul>
 
 <br><br>
+<!-- pagination -->
 <ul class="pagination">
     <ul class="pager">
     <?php if($pagination->current > 1): ?>

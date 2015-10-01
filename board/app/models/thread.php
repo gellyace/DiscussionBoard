@@ -13,7 +13,6 @@ class Thread extends AppModel
     public static function getAll($offset, $limit)
     {
         $threads = array();
-
         $db = DB::conn();
         $rows = $db->rows( sprintf("SELECT * FROM thread ORDER BY id LIMIT %d, %d", $offset, $limit));
 
@@ -32,7 +31,6 @@ class Thread extends AppModel
     public static function get($id)
     {
         $db = DB::conn();
-
         $row = $db->row('SELECT * FROM thread WHERE id = ?', array($id));
 
         if(!$row){

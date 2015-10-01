@@ -4,9 +4,7 @@
     <title></title>
 </head>
 <body class="thread_create">
-
-<h1> Create a thread</h1>
-
+<!-- Validation Errors Block-->
 <?php if ($thread->hasError() || $comment->hasError()): ?>
     <div class="alert alert-block">
         <h4 class="alert-warning">Validation error!</h4>
@@ -24,7 +22,8 @@
             <? endif ?>    
     </div>
 <? endif ?> 
-
+<!-- Form Block -->
+<h1> Create a thread</h1>
 <form class="well" method="post" action="<?php char_to_html(url('')) ?>">
     <label class="form">Title</label>
         <input type="text" class="span2" name="title" placeholder="title" value="<?php char_to_html(Param::get('title')) ?>">
@@ -38,6 +37,5 @@
 <a href="<?php char_to_html(url('thread/index', array('thread_id' => $thread->id))) ?>">
     &larr; Go to thread
 </a>
-
 </body>
 </html>

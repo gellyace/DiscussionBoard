@@ -95,14 +95,12 @@ class Users extends AppModel
             $this->user_validated = false;
             throw new RecordNotFoundException("Invalid Information");
         }
-
         return new self($user_account);
     }
 
     public static function getUsername($username)
     {
         $db = DB::conn();
-
         $row = $db->row('SELECT * FROM users WHERE username = ?', array($username));
 
         return !$row ? false : new self($row);
@@ -111,7 +109,6 @@ class Users extends AppModel
     public static function getEmail($email)
     {
         $db = DB::conn();
-
         $row = $db->row('SELECT * FROM users WHERE email = ?', array($email));
 
         return !$row ? false : new self($row);

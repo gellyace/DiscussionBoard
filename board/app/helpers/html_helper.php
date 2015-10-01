@@ -7,13 +7,13 @@ function char_to_html($string)
 
 function readable_text($s)
 {
-	$s = htmlspecialchars($s, ENT_QUOTES);
-	$s = nl2br($s);
-	return $s;
+    $s = htmlspecialchars($s, ENT_QUOTES);
+    $s = nl2br($s);
+    return $s;
 }
 
 function redirect($url)
 {        
     header('Location: '.$url);
-    exit();	
+    exit(); 
 }

@@ -1,5 +1,5 @@
 <h2> <?php char_to_html($thread->title) ?> </h2>
-           
+<!-- Validation Errors Block-->
 <?php if ($comment->hasError()): ?>
     <div class="alert alert-block">   
         <h4 class="alert-heading">Validation error!</h4>
@@ -11,7 +11,7 @@
         <?php endif ?>
     </div>                    
 <?php endif ?>
-        
+<!-- Form Block -->
 <form class="well" method="post" action="<?php char_to_html(url('comment/write')) ?>">
     <label>Comment</label>
         <textarea name="body" placeholder = "comment" value="<?php char_to_html(Param::get('body')) ?>"></textarea>
