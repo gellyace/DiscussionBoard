@@ -6,14 +6,14 @@
         <h4 class="alert-heading">Validation error!</h4>
             <!-- Generate Error Message if username contains characters other than numbers and letters -->
             <?php if (!empty($user->validation_errors['username']['alphanumeric'])): ?>
-                <div><em>Username</em> must only contain alphanumeric (a-z, A-z, 0-9) characters.</div>
+                <div><em>Username</em> must only contain alphanumeric (a-z, A-Z, 0-9) characters.</div>
             <? endif ?>
             <!-- Generate Error Message if firstname or lastname contain characters other than letters and extra spaces -->
             <?php if (!empty($user->validation_errors['firstname']['name'])): ?>
-                <div><em>Firstname</em> must only contain letters (a-z, A-z).</div>
+                <div><em>Firstname</em> must only contain letters (a-z, A-Z).</div>
             <? endif ?>
             <?php if (!empty($user->validation_errors['lastname']['name'])): ?>
-                <div><em>Lastname</em> must only contain letters (a-z, A-z).</div>
+                <div><em>Lastname</em> must only contain letters (a-z, A-Z).</div>
             <? endif ?>
             <!-- Generate Error Message if email address does not follow the alphanumeric@word.word format -->
             <?php if (!empty($user->validation_errors['email']['format'])): ?>
@@ -77,7 +77,7 @@
                 <label class="form"><span class="glyphicon glyphicon-user"></span>  Username:</label><br>
                     <input type="text" name="username" placeholder="Enter username" value="<?php char_to_html(Param::get('username')) ?>" required>
                 <hr>
-                <label class="form"><span class="glyphicon glyphicon-email"></span>  Email Address:</label><br>
+                <label class="form"><span class="glyphicon glyphicon-envelope"></span>  Email Address:</label><br>
                     <input type="text" name="email" placeholder="Enter email" value="<?php char_to_html(Param::get('email')) ?>" required>
                 <hr>
                 <label class="form"><span class="glyphicon glyphicon-lock"></span>  Password:</label><br>
