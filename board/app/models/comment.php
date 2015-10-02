@@ -3,6 +3,8 @@ class Comment extends AppModel
 {
     const MIN_COMMENT_LENGTH = 1;
     const MAX_COMMENT_LENGTH = 300;
+    
+    const COMMENT_TABLE = 'comment';
 
     public $validation = array(
         'body' => array(
@@ -42,11 +44,10 @@ class Comment extends AppModel
         $params = array(
             'thread_id' => $thread_id,
             'username' => $this->username,
-            'body' => $this->body,
-            'created' => date("Y-m-d H:i:s")
+            'body' => $this->body
         );
 
-        $db->insert('comment', $params);
+        $db->insert(self::COMMENT_TABLE, $params);
         $db->commit();
     }
 }

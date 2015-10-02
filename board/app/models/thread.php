@@ -3,6 +3,8 @@ class Thread extends AppModel
 {
     const MIN_TITLE_LENGTH = 1;
     const MAX_TITLE_LENGTH = 30;
+    
+    const THREAD_TABLE = 'thread';
 
     public $validation = array(
         'title'=> array(
@@ -46,18 +48,17 @@ class Thread extends AppModel
         $comment->validate();
         
         if ($this->hasError() || $comment->hasError()) {                    
-            throw new ValidationException('invalid thread or comment');
+            throw new ValidationException('Ivalid thread or comment');
         }
                     
         $db = DB::conn();
         $db->begin();
         
         $params = array(
-            'title' => $this->title,
-            'created' => date("Y-m-d H:i:s")
+            'title' => $this->title
         );
 
-        $db->insert('thread', $params);
+        $db->insert(self::THREAD_TABLE, $params);
         $this->id = $db->lastInsertId(); 
 
         // write first comment at the same time

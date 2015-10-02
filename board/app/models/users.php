@@ -5,6 +5,8 @@ class Users extends AppModel
     const MIN_PASSWORD_LENGTH = 6;
     const MIN_EMAIL_LENGTH = 11;
     const MAX_DETAILS_LENGTH = 30;
+    
+    const USERS_TABLE = 'users';
 
     public $user_validated = true;
     public $validation = array(
@@ -70,11 +72,10 @@ class Users extends AppModel
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
             'email' => $this->email,
-            'password' => $hashedPassword,
-            'created' => date("Y-m-d H:i:s")
+            'password' => $hashedPassword
         );
 
-        $db->insert('users', $params);
+        $db->insert(self::USERS_TABLE, $params);
         $db->commit();
     }
 
