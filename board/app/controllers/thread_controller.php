@@ -36,7 +36,6 @@ class ThreadController extends AppController
                 
             case self::CREATE_END_THREAD:
                 $thread->title = Param::get('title');
-                //set_session_username($$_SESSION['username']);
                 $comment->username = get_session_username();
                 $comment->body = Param::get('body');                
                 try {
