@@ -7,9 +7,13 @@ require_once APP_DIR.'app_exception.php';
 
 // helpers
 require_once HELPERS_DIR.'html_helper.php';
+require_once HELPERS_DIR.'validation_helper.php';
 
 //vendor
 require_once VENDOR_DIR.'SimpleDBI/SimpleDBI.php';
+
+//library
+require_once LIB_DIR.'SimplePagination/SimplePagination.php';
 
 // config
 require_once CONFIG_DIR.'log.php';
@@ -26,3 +30,31 @@ spl_autoload_register(function($name) {
         }
     }
 });
+
+function set_session_username($username)
+{
+    if(!isset($_SESSION)) { 
+        session_start(); 
+    } 
+    $_SESSION['username'] = $username;
+}
+
+function get_session_username()
+{
+    if(!isset($_SESSION)) { 
+        session_start(); 
+    } 
+    return $username = $_SESSION['username'];
+}
+
+function check_user_session($username)
+{
+    if((isset($_SESSION['username']) == $username) && ($username!=null)) {   
+    }
+    if(!isset($_SESSION['username'])) {
+        session_start();
+        session_destroy();
+        redirect('/users/login');
+        exit();
+    }
+}
