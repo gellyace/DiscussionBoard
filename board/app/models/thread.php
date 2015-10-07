@@ -67,7 +67,7 @@ class Thread extends AppModel
         $db->commit();
     }
 
-    public function edit()
+    public function edit(Thread $thread)
     {
         $this->validate();
         
@@ -88,14 +88,14 @@ class Thread extends AppModel
         $db->commit();
     }
 
-    public static function getThreadDetails($id, $user_id)
+    public static function getById($id)
     {
         $db = DB::conn();
-        $rows = $db->rows( sprintf("SELECT title,category FROM thread WHERE id = :id AND user_id = :user_id", array($id,$user_id)));
-
-        foreach ($rows as $row) {
-            $threads[] = new self($row);
+        $row = $db->row('SELECT * FROM thread WHERE user_id = ?', array($id));
+        
+        if(!$row){
+            throw new RecordNotFoundException('No Record Found');
         }
-        return $threads;
+        return new self($row);
     }        
 }

@@ -20,7 +20,7 @@
 <form class="well" method="post" action="<?php char_to_html(url('')) ?>">
 
     <label class="form">Title</label>
-        <input type="text" name="title" placeholder="title" value="<?php char_to_html($thread->title) ?>">
+        <input type="text" name="title" placeholder="title" value="<?php char_to_html($thread_edit->title) ?>">
 
     <div class="btn-group">
         <label>Categories:</label>

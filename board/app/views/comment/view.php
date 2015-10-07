@@ -4,7 +4,6 @@
     <title></title>
 </head>
 <body class="comment_view">
-<?php var_dump($thread)?>
 <h1> <?php char_to_html($thread->title) ?> </h1>
 <!-- Edit and Delete -->
 

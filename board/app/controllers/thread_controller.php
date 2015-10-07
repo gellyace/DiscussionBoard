@@ -61,7 +61,15 @@ class ThreadController extends AppController
     {
         check_user_session(get_session_username());
         $user_id = get_session_id();
-        $thread = Thread::getThreadDetails(Param::get('thread_id'),$user_id);
+                
+        $params = array(
+            'title' => Param::get('title'),
+            'category' => Param::get('category'),
+        );
+
+       $thread = new Thread($params);
+       $thread_edit = Thread::getById(get_session_id());
+
 
         $page = Param::get('page_next', self::EDIT_THREAD);
 
@@ -70,8 +78,6 @@ class ThreadController extends AppController
                 break;
                 
             case self::EDIT_END_THREAD:
-                $thread->title = Param::get('title');
-                $thread->category = Param::get('category');
                 try {
                     $thread->edit();
                 } catch (ValidationException $e) {
@@ -83,7 +89,9 @@ class ThreadController extends AppController
                 throw new NotFoundException("{$page} is not found");                    
                 break;
         }
+
         $this->set(get_defined_vars());
         $this->render($page);
+        
     }
 }
