@@ -6,7 +6,7 @@ class Users extends AppModel
     const MIN_EMAIL_LENGTH = 11;
     const MAX_DETAILS_LENGTH = 30;
     
-    const USERS_TABLE = 'users';
+    const USERS_TABLE = 'user';
 
     public $user_validated = true;
     public $validation = array(
@@ -52,7 +52,7 @@ class Users extends AppModel
     public function getHashedPassword($username)
     {
         $db = DB::conn();
-        $row = $db->row('SELECT password FROM users WHERE username = ?', array($username));
+        $row = $db->row('SELECT password FROM user WHERE username = ?', array($username));
         return $row['password'];
     }
     
@@ -89,7 +89,7 @@ class Users extends AppModel
         
         $db = DB::conn();
 
-        $user_account = $db->row('SELECT id, username, password FROM users WHERE username = ?', array($username));
+        $user_account = $db->row('SELECT id, username, password FROM user WHERE username = ?', array($username));
         $hashedPassword = self::getHashedPassword($username);
 
         if (!$user_account OR !self::verifyPassword($password, $hashedPassword)) {
@@ -102,7 +102,7 @@ class Users extends AppModel
     public static function getUsername($username)
     {
         $db = DB::conn();
-        $row = $db->row('SELECT * FROM users WHERE username = ?', array($username));
+        $row = $db->row('SELECT * FROM user WHERE username = ?', array($username));
 
         return !$row ? false : new self($row);
     } 
@@ -110,7 +110,7 @@ class Users extends AppModel
     public static function getEmail($email)
     {
         $db = DB::conn();
-        $row = $db->row('SELECT * FROM users WHERE email = ?', array($email));
+        $row = $db->row('SELECT * FROM user WHERE email = ?', array($email));
 
         return !$row ? false : new self($row);
     }  
