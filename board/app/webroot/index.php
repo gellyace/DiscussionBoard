@@ -5,3 +5,4 @@ require_once ROOT_DIR.'dietcake/dietcake.php';
 require_once CONFIG_DIR.'bootstrap.php';
 require_once CONFIG_DIR.'core.php';
 Dispatcher::invoke();
+?>

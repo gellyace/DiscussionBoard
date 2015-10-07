@@ -30,3 +30,15 @@ created                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (id),
 INDEX (thread_id, created)
 )ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS users (
+id                      INT UNSIGNED NOT NULL AUTO_INCREMENT,
+username                VARCHAR(255) NOT NULL,
+firstname               VARCHAR(255) NOT NULL,
+lastname                VARCHAR(255) NOT NULL,
+email                   VARCHAR(255) NOT NULL,
+password                VARCHAR(255) NOT NULL,
+created                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (id)
+)ENGINE=InnoDB;
+
