@@ -18,7 +18,7 @@ id                      INT UNSIGNED NOT NULL AUTO_INCREMENT,
 user_id					INT UNSIGNED NOT NULL,
 title                   VARCHAR(50) NOT NULL,
 category 				VARCHAR(50) NOT NULL,
-created              	DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+created              	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (id),
 FOREIGN KEY (user_id) REFERENCES user(id)
 )ENGINE=InnoDB;
@@ -29,7 +29,7 @@ id                      INT UNSIGNED NOT NULL AUTO_INCREMENT,
 thread_id               INT UNSIGNED NOT NULL,
 user_id                 INT UNSIGNED NOT NULL,
 body                    TEXT NOT NULL,
-created                 DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+created                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (id),
 INDEX (thread_id, created),
 FOREIGN KEY (thread_id) REFERENCES thread(id),
@@ -44,7 +44,7 @@ lastname                VARCHAR(50) NOT NULL,
 email                   VARCHAR(50) NOT NULL,
 password                VARCHAR(50) NOT NULL,
 status					VARCHAR(50) NOT NULL,
-created                 DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+created                 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
