@@ -55,14 +55,47 @@ class Thread extends AppModel
         $db->begin();
         
         $params = array(
-            'title' => $this->title
+            'title' => $this->title,
+            'category' => $this->category,
+            'user_id' => $this->user_id
         );
 
         $db->insert(self::THREAD_TABLE, $params);
         $this->id = $db->lastInsertId(); 
 
-        // write first comment at the same time
         $comment->write($this->id);
         $db->commit();
+    }
+
+    public function edit()
+    {
+        $this->validate();
+        
+        if ($this->hasError()) {                    
+            throw new ValidationException('Ivalid thread');
+        }
+                    
+        $db = DB::conn();
+        $db->begin();
+        
+        $params = array(
+            'title' => $this->title,
+            'category' => $this->category
+        );
+
+        $db->update(self::THREAD_TABLE, $params);
+      
+        $db->commit();
+    }
+
+    public static function getThreadDetails($id, $user_id)
+    {
+        $db = DB::conn();
+        $rows = $db->rows( sprintf("SELECT title,category FROM thread WHERE id = :id AND user_id = :user_id", array($id,$user_id)));
+
+        foreach ($rows as $row) {
+            $threads[] = new self($row);
+        }
+        return $threads;
     }        
 }

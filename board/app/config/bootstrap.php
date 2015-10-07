@@ -31,12 +31,13 @@ spl_autoload_register(function($name) {
     }
 });
 
-function set_session_username($username)
+function set_session($username, $user_id)
 {
     if(!isset($_SESSION)) { 
         session_start(); 
     } 
     $_SESSION['username'] = $username;
+    $_SESSION['id'] = $user_id;
 }
 
 function get_session_username()
@@ -45,6 +46,14 @@ function get_session_username()
         session_start(); 
     } 
     return $username = $_SESSION['username'];
+}
+
+function get_session_id()
+{
+    if(!isset($_SESSION)) { 
+        session_start(); 
+    } 
+    return $user_id = $_SESSION['id'];
 }
 
 function check_user_session($username)
@@ -58,3 +67,4 @@ function check_user_session($username)
         exit();
     }
 }
+

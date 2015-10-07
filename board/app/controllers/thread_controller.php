@@ -7,6 +7,8 @@ class ThreadController extends AppController
 
     const CREATE_THREAD = 'create';
     const CREATE_END_THREAD = 'create_end';
+    const EDIT_THREAD = 'edit';
+    const EDIT_END_THREAD = 'edit_end';
 
     public function index()
     {
@@ -26,6 +28,7 @@ class ThreadController extends AppController
     public function create()
     {
         check_user_session(get_session_username());
+        $user_id = get_session_id();
         $thread = new Thread();
         $comment = new Comment();
         $page = Param::get('page_next', self::CREATE_THREAD);
@@ -36,12 +39,43 @@ class ThreadController extends AppController
                 
             case self::CREATE_END_THREAD:
                 $thread->title = Param::get('title');
-                $comment->username = get_session_username();
-                $comment->body = Param::get('body');                
+                $comment->body = Param::get('body'); 
+                $thread->category = Param::get('category');
+                $thread->user_id = get_session_id();
                 try {
                     $thread->create($comment);
                 } catch (ValidationException $e) {
                     $page = self::CREATE_THREAD;
+                }
+                break;
+
+            default:
+                throw new NotFoundException("{$page} is not found");                    
+                break;
+        }
+        $this->set(get_defined_vars());
+        $this->render($page);
+    }
+
+    public function edit()
+    {
+        check_user_session(get_session_username());
+        $user_id = get_session_id();
+        $thread = Thread::getThreadDetails(Param::get('thread_id'),$user_id);
+
+        $page = Param::get('page_next', self::EDIT_THREAD);
+
+        switch ($page) {
+            case self::EDIT_THREAD:
+                break;
+                
+            case self::EDIT_END_THREAD:
+                $thread->title = Param::get('title');
+                $thread->category = Param::get('category');
+                try {
+                    $thread->edit();
+                } catch (ValidationException $e) {
+                    $page = self::EDIT_THREAD;
                 }
                 break;
 

@@ -4,13 +4,17 @@
     <title></title>
 </head>
 <body class="comment_view">
-
+<?php var_dump($thread)?>
 <h1> <?php char_to_html($thread->title) ?> </h1>
+<!-- Edit and Delete -->
+
+    <a href="<?php char_to_html(url('thread/edit', array('thread_id' => $thread->id))) ?>">Edit</a>
+    <a href="<?php char_to_html(url('thread/index', array('thread_id' => $thread->id))) ?>">Delete</a>
 
 <?php foreach($comments as $k=>$v): ?>
     <div class ="comment">
         <div class="meta">
-            <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?> <?php char_to_html($v->created) ?>            
+            <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?>   --------   <?php char_to_html($v->created) ?>            
         </div>
         <div><?php echo readable_text($v->body) ?></div>
     </div>

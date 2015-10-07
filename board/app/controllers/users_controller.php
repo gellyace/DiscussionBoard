@@ -21,7 +21,7 @@ class UsersController extends AppController
                 $user->password = Param::get('password');
                 try {
                     $user_account = $user->login($user);
-                    set_session_username($user_account->username);
+                    set_session($user_account->username, $user_account->id);
                 } catch (RecordNotFoundException $e){
                     $page=self::LOGIN_USER;
                 }
@@ -53,7 +53,7 @@ class UsersController extends AppController
                 $user->password = Param::get('password');
                 try {
                     $user->register($user);
-                    set_session_username($user->username);
+                    set_session($user->username, $user->id);
                 } catch (ValidationException $e) {
                     $page=self::REGISTER_USER;
                 }

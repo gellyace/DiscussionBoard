@@ -10,7 +10,7 @@
         <?php foreach ($threads as $v): ?>
         <li>
             <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
-            <?php char_to_html($v->title) ?></a>        
+            <?php char_to_html($v->title) ?> ----> Category: <?php char_to_html($v->category) ?></a>        
         </li>
         <?php endforeach ?>
     </ul>
@@ -44,6 +44,7 @@
 <br><br><br><br>
 <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/create')) ?>"> Create </a>
 <a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/logout')) ?>"> Logout </a>
+
 
 </body>
 </html>

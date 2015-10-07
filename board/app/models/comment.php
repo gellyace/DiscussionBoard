@@ -12,7 +12,7 @@ class Comment extends AppModel
         ), 
     );
         
-    public static function getAll($offset, $limit, $thread_id)
+    public static function getAll($offset, $limit, $thread_id, $user_id)
     {
         $comments = array();
         $db = DB::conn();
@@ -22,6 +22,7 @@ class Comment extends AppModel
         );
         
         foreach ($rows as $row) {
+            $row['username'] = Users::getUsernameById($user_id);
             $comments[] = new self($row);
         }
         return $comments;
@@ -43,11 +44,12 @@ class Comment extends AppModel
         
         $params = array(
             'thread_id' => $thread_id,
-            'username' => $this->username,
+            'user_id' => get_session_id(),
             'body' => $this->body
         );
 
         $db->insert(self::COMMENT_TABLE, $params);
         $db->commit();
     }
+
 }

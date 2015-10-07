@@ -113,5 +113,14 @@ class Users extends AppModel
         $row = $db->row('SELECT * FROM user WHERE email = ?', array($email));
 
         return !$row ? false : new self($row);
-    }  
+    }
+
+    public static function getUsernameById($id)
+    {
+        $db = DB::conn();
+        $row = $db->row('SELECT username FROM user WHERE id = ?', array($id));
+        return $row['username'];
+    }
+
+
 }
