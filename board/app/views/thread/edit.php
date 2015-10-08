@@ -5,13 +5,13 @@
 </head>
 <body class="thread_edit">
 
-<?php if ($thread->hasError()): ?>
+<?php if ($thread_edit->hasError()): ?>
     <div class="alert alert-block">
         <h4 class="alert-warning">Validation error!</h4>
-            <?php if (!empty($thread->validation_errors['title']['length'])): ?>
+            <?php if (!empty($thread_edit->validation_errors['title']['length'])): ?>
                 <div><em>Title</em> must be between
-                    <?php char_to_html($thread->validation['title']['length'][1]) ?> and
-                    <?php char_to_html($thread->validation['title']['length'][2]) ?> characters in length.
+                    <?php char_to_html($thread_edit->validation['title']['length'][1]) ?> and
+                    <?php char_to_html($thread_edit->validation['title']['length'][2]) ?> characters in length.
                 </div>
             <? endif ?> 
 <? endif ?> 
@@ -40,7 +40,7 @@
 
 <br><br>
 <a href="<?php char_to_html(url('comment/view', array('thread_id' => $thread_edit->id))) ?>">
-    &larr; Back to your thread
+    &larr; Back to your thread </a>
 
 </body>
 </html>

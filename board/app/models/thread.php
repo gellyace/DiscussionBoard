@@ -108,4 +108,21 @@ class Thread extends AppModel
         $db->query("DELETE FROM thread WHERE id = ?", array($id));
         $db->commit();
     }
+
+    public static function trending()
+    {
+        $threads = array();
+        $db = DB::conn();
+        $mostComments = Comment::sortComments();
+        
+        foreach ($mostComments as $row) {
+            $rows = $db->row("SELECT * FROM thread WHERE id=? ", array($row['thread_id']));
+            $rows['count'] = $row['COUNT(*)'];
+            $rows['created'] = $rows['created'];
+            $rows['category'] = $rows['category'];
+            $threads[] = new self($rows);
+        }
+        return $threads;
+    }
+
 }

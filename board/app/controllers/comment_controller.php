@@ -7,13 +7,15 @@ class CommentController extends AppController
 
     const WRITE_COMMENT = 'write';
     const WRITE_END_COMMENT = 'write_end';
+    const EDIT_COMMENT = 'edit';
+    const EDIT_END_COMMENT = 'edit_end';
 
     public function view()
     {
         check_user_session(get_session_username());
         $thread = Thread::get(Param::get('thread_id'));
         $thread_id = Param::get('thread_id');
-       
+        
         $page = Param::get('page', self::DEFAULT_PAGE);
         $pagination = new SimplePagination($page, self::PER_PAGE);
 
@@ -56,5 +58,43 @@ class CommentController extends AppController
         $this->render($page);
     } 
 
-      
+    public function edit()
+    {
+        check_user_session(get_session_username());
+        $user_id = get_session_id();
+        $comment_id = Param::get('id');
+        $thread = Thread::get(Param::get('thread_id'));
+
+        $params = array(
+            'body' => Param::get('body')
+        );
+
+        $comment = new Comment($params);
+        $comment_edit = Comment::getById($comment_id);
+
+        $page = Param::get('page_next', self::EDIT_COMMENT);
+
+        switch ($page) {
+            case self::EDIT_COMMENT:
+                break;
+                
+            case self::EDIT_END_COMMENT:
+                $comment->body = Param::get('body');
+                $comment->id = $comment_id;
+                //$thread->title = Param::get('title');
+                try {
+                    $comment->edit();
+                } catch (ValidationException $e) {
+                    $page = self::EDIT_COMMENT;
+                }
+                break;
+
+            default:
+                throw new NotFoundException("{$page} is not found");                    
+                break;
+        }
+
+        $this->set(get_defined_vars());
+        $this->render($page);
+    }
 }

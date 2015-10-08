@@ -33,6 +33,12 @@ class Comment extends AppModel
         $db = DB::conn();
         return $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ?', array($thread_id));
     }
+
+    public static function sortComments()
+    {
+        $db = DB::conn();
+        return $db->rows('SELECT COUNT(*), thread_id FROM comment GROUP BY thread_id ORDER BY COUNT(*) DESC, created DESC LIMIT 10');
+    }
      
     public function write($thread_id)
     {
@@ -52,4 +58,31 @@ class Comment extends AppModel
         $db->commit();
     }
 
+    public static function getByID($comment_id)
+    { 
+        $db = DB::conn();
+        $row = $db->row('SELECT * FROM comment WHERE id = ?', array($comment_id));
+        
+        if(!$row){
+            throw new RecordNotFoundException('No Record Found');
+        }
+        return new self($row);
+    }
+
+    public function edit()
+    {
+        if(!$this->validate()){
+            throw new ValidationException("Invalid Comment");
+        }
+                    
+        $db = DB::conn();
+        $db->begin();
+        
+        $params = array('body' => $this->body);
+        $where_params = array('id' => $this->id);
+
+        $db->update(self::COMMENT_TABLE, $params, $where_params);
+      
+        $db->commit();
+    }
 }

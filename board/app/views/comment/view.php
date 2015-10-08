@@ -13,7 +13,7 @@
 </head>
 <body class="comment_view">
 <h1> <?php char_to_html($thread->title) ?> </h1>
-<!-- Edit and Delete -->
+<!-- Edit and Delete Thread -->
 <?php if(($thread->user_id) == get_session_id()): ?>
     <a href="<?php char_to_html(url('thread/edit', array('thread_id' => $thread->id))) ?>">Edit</a>
     <a href="javascript:deleteThread(<?php echo ($thread->id); ?>)">Delete</a>
@@ -22,7 +22,12 @@
 <?php foreach($comments as $k=>$v): ?>
     <div class ="comment">
         <div class="meta">
-            <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?>   --------   <?php char_to_html($v->created) ?>            
+            <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?> --------   <?php char_to_html($v->created) ?>            
+            <!-- Edit and Delete Comment -->
+            <?php if(($v->user_id) == get_session_id()): ?>
+                <a href="<?php char_to_html(url('comment/edit', array('id' => $v->id))) ?>">Edit</a>
+                <a href="javascript:deleteComment(<?php echo ($v->id); ?>)">Delete</a>
+            <?php endif ?>
         </div>
         <div><?php echo readable_text($v->body) ?></div>
     </div>
