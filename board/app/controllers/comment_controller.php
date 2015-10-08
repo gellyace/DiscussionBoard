@@ -13,12 +13,11 @@ class CommentController extends AppController
         check_user_session(get_session_username());
         $thread = Thread::get(Param::get('thread_id'));
         $thread_id = Param::get('thread_id');
-        $user_id = get_session_id();
-
+       
         $page = Param::get('page', self::DEFAULT_PAGE);
         $pagination = new SimplePagination($page, self::PER_PAGE);
 
-        $comments = Comment::getAll($pagination->start_index-1, $pagination->count+1, $thread_id, $user_id);
+        $comments = Comment::getAll($pagination->start_index-1, $pagination->count+1, $thread_id);
         $pagination->checkLastPage($comments);
 
         $total = Comment::countAll($thread->id);

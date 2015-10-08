@@ -9,6 +9,7 @@ class ThreadController extends AppController
     const CREATE_END_THREAD = 'create_end';
     const EDIT_THREAD = 'edit';
     const EDIT_END_THREAD = 'edit_end';
+    const DELETE_THREAD = 'delete_end';
 
     public function index()
     {
@@ -61,15 +62,15 @@ class ThreadController extends AppController
     {
         check_user_session(get_session_username());
         $user_id = get_session_id();
-                
+        $thread_id = Param::get('thread_id');
+
         $params = array(
             'title' => Param::get('title'),
             'category' => Param::get('category'),
         );
 
-       $thread = new Thread($params);
-       $thread_edit = Thread::getById(get_session_id());
-
+        $thread = new Thread($params);
+        $thread_edit = Thread::getById($thread_id);
 
         $page = Param::get('page_next', self::EDIT_THREAD);
 
@@ -78,6 +79,9 @@ class ThreadController extends AppController
                 break;
                 
             case self::EDIT_END_THREAD:
+                $thread->title = Param::get('title');
+                $thread->category = Param::get('category');
+                $thread->id = $thread_id;
                 try {
                     $thread->edit();
                 } catch (ValidationException $e) {
@@ -92,6 +96,30 @@ class ThreadController extends AppController
 
         $this->set(get_defined_vars());
         $this->render($page);
-        
+    }
+
+    public function delete()
+    {
+        check_user_session(get_session_username());
+        $thread = new Thread();
+        $thread_id = Param::get('thread_id');
+        $page = Param::get('page_next', self::DELETE_THREAD);
+
+        switch ($page) {
+            case self::DELETE_THREAD:
+                $thread->id = $thread_id;
+                try {
+                    $thread->delete($thread_id);
+                } catch (ValidationException $e) {
+                    $page = self::DELETE_THREAD;
+                }
+                break;
+
+            default:
+                throw new NotFoundException("{$page} is not found");                    
+                break;
+        }
+        $this->set(get_defined_vars());
+        $this->render($page);
     }
 }

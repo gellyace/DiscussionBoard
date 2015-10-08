@@ -25,11 +25,11 @@
     <div class="btn-group">
         <label>Categories:</label>
         <select name="category">
-            <option value="Movies">Movies</option>
-            <option value="TV Series">TV Series</option>
-            <option value="Anime/Manga">Anime/Manga</option>
-            <option value="Music">Music</option>
-            <option value="Random Stuff">Random Stuff</option>
+            <option value="Movies" <?php echo (($thread_edit->category) == 'Movies')? 'selected="selected"' : '' ; ?> >Movies</option>
+            <option value="TV Series" <?php echo (($thread_edit->category) == 'TV Series')? 'selected="selected"' : '' ; ?> >TV Series</option>
+            <option value="Anime/Manga" <?php echo (($thread_edit->category) == 'Anime/Manga')? 'selected="selected"' : '' ; ?> >Anime/Manga</option>
+            <option value="Music" <?php echo (($thread_edit->category) == 'Music')? 'selected="selected"' : '' ; ?> >Music</option>
+            <option value="Random Stuff" <?php echo (($thread_edit->category) == 'Random Stuff')? 'selected="selected"' : '' ; ?> >Random Stuff</option>
         </select>
     </div>
 
@@ -38,6 +38,9 @@
     <button type="submit" class="btn btn-primary"> Submit </button>
 </form>
 
+<br><br>
+<a href="<?php char_to_html(url('comment/view', array('thread_id' => $thread_edit->id))) ?>">
+    &larr; Back to your thread
 
 </body>
 </html>

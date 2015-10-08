@@ -2,14 +2,23 @@
 <html class="comment_view">
 <head>
     <title></title>
+    <script type="text/javascript">
+    function deleteThread(id)
+    {
+        if(confirm('Sure To Remove This Record ?')) {
+            window.location.href="<?php char_to_html(url('thread/delete', array('thread_id' => $thread->id))) ?>";
+        }
+    }
+    </script>
 </head>
 <body class="comment_view">
 <h1> <?php char_to_html($thread->title) ?> </h1>
 <!-- Edit and Delete -->
-
+<?php if(($thread->user_id) == get_session_id()): ?>
     <a href="<?php char_to_html(url('thread/edit', array('thread_id' => $thread->id))) ?>">Edit</a>
-    <a href="<?php char_to_html(url('thread/index', array('thread_id' => $thread->id))) ?>">Delete</a>
-
+    <a href="javascript:deleteThread(<?php echo ($thread->id); ?>)">Delete</a>
+<?php endif ?>
+<!-- Display All Comments inside this thread -->
 <?php foreach($comments as $k=>$v): ?>
     <div class ="comment">
         <div class="meta">

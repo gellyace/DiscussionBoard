@@ -67,7 +67,7 @@ class Thread extends AppModel
         $db->commit();
     }
 
-    public function edit(Thread $thread)
+    public function edit()
     {
         $this->validate();
         
@@ -82,20 +82,30 @@ class Thread extends AppModel
             'title' => $this->title,
             'category' => $this->category
         );
+        $where_params = array('id' => $this->id);
 
-        $db->update(self::THREAD_TABLE, $params);
+        $db->update(self::THREAD_TABLE, $params, $where_params);
       
         $db->commit();
     }
 
-    public static function getById($id)
+    public static function getById($thread_id)
     {
         $db = DB::conn();
-        $row = $db->row('SELECT * FROM thread WHERE user_id = ?', array($id));
+        $row = $db->row('SELECT * FROM thread WHERE id = ?', array($thread_id));
         
         if(!$row){
             throw new RecordNotFoundException('No Record Found');
         }
         return new self($row);
-    }        
+    }
+
+    public function delete($id)
+    {                    
+        $db = DB::conn();
+        $db->begin();
+        $db->query("DELETE FROM comment WHERE thread_id = ?", array($id));
+        $db->query("DELETE FROM thread WHERE id = ?", array($id));
+        $db->commit();
+    }
 }
