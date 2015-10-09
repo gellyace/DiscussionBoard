@@ -122,5 +122,11 @@ class Users extends AppModel
         return $row['username'];
     }
 
+    public static function getIdByUsername($username)
+    {
+        $db = DB::conn();
+        $row = $db->row('SELECT id FROM user WHERE username = ?', array($username));
+        return $row['id'];
+    }
 
 }

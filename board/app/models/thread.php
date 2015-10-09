@@ -130,27 +130,48 @@ class Thread extends AppModel
         }
         return $threads;
     }
-
-    public static function search($keyword)
-    {
-        $db = DB::conn();
-        $db->begin();
-        $rows = $db->rows('SELECT * FROM user WHERE username like ?', array("%{$keyword}%"));
-
-        
-    }
-
+    
     public static function searchProfile($keyword)
     {
         $users = array();
         $db = DB::conn();
         $db->begin();
-        $rows = $db->rows('SELECT username,firstname,lastname,email FROM user WHERE username LIKE %:username% OR firstname LIKE %:firstname% OR lastname LIKE %:lastname% OR email LIKE %:email% ', array($keyword));
+        
+        $rows = $db->rows("SELECT username,firstname,lastname,email FROM user WHERE username LIKE ? ", array("%{$keyword}%"));
         
         foreach ($rows as $row) {
             $users[] = new self($row);
         }
         return $users;  
     }
+
+    public static function searchThread($keyword)
+    {
+        $threads = array();
+        $db = DB::conn();
+        $db->begin();
+        
+        $rows = $db->rows("SELECT title,category FROM thread WHERE title LIKE ? OR category LIKE ?", array("%{$keyword}%", "%{$keyword}%"));
+        
+        foreach ($rows as $row) {
+            $threads[] = new self($row);
+        }
+        return $threads;  
+    }
+
+    public static function searchComment($keyword)
+    {
+        $comments = array();
+        $db = DB::conn();
+        $db->begin();
+        
+        $rows = $db->rows("SELECT body FROM comment WHERE body LIKE ? ", array("%{$keyword}%"));
+        
+        foreach ($rows as $row) {
+            $comments[] = new self($row);
+        }
+        return $comments;  
+    }
+
 
 }
