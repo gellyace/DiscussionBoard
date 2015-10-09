@@ -1,5 +1,4 @@
-<!-- <h2> <?php char_to_html($thread->title) ?> </h2> -->
-<?php var_dump( $thread) ?>
+<h2> <?php char_to_html($thread_edit->title) ?> </h2> 
 <!-- Validation Errors Block-->
 <?php if ($comment_edit->hasError()): ?>
     <div class="alert alert-block">   
@@ -13,11 +12,11 @@
     </div>                    
 <?php endif ?>
 <!-- Form Block -->
-<form class="well" method="post" action="<?php char_to_html(url('comment/edit')) ?>">
+<form class="well" method="post" action="<?php char_to_html(url('')) ?>">
     <label>Comment</label>
         <textarea name="body" placeholder = "comment" value="<?php char_to_html($comment_edit->body) ?>"><?php echo($comment_edit->body) ?></textarea>
     <br />
-    <input type="hidden" name="thread_id" value="<?php char_to_html($thread->id) ?>">
+    <input type="hidden" name="thread_id" value="<?php char_to_html($thread_edit->id) ?>">
     <input type="hidden" name="page_next" value="edit_end">
     <button type="submit" class="btn btn-primary">Submit</button>                  
 </form> 

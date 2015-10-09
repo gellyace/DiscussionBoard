@@ -9,17 +9,19 @@ class CommentController extends AppController
     const WRITE_END_COMMENT = 'write_end';
     const EDIT_COMMENT = 'edit';
     const EDIT_END_COMMENT = 'edit_end';
+    const DELETE_COMMENT = 'delete_end';
 
     public function view()
     {
         check_user_session(get_session_username());
         $thread = Thread::get(Param::get('thread_id'));
         $thread_id = Param::get('thread_id');
+        $user_id = get_session_id();
         
         $page = Param::get('page', self::DEFAULT_PAGE);
         $pagination = new SimplePagination($page, self::PER_PAGE);
 
-        $comments = Comment::getAll($pagination->start_index-1, $pagination->count+1, $thread_id);
+        $comments = Comment::getAll($pagination->start_index-1, $pagination->count+1, $thread_id, $user_id);
         $pagination->checkLastPage($comments);
 
         $total = Comment::countAll($thread->id);
@@ -63,14 +65,17 @@ class CommentController extends AppController
         check_user_session(get_session_username());
         $user_id = get_session_id();
         $comment_id = Param::get('id');
-        $thread = Thread::get(Param::get('thread_id'));
+        $thread_id = Param::get('thread_id');
 
-        $params = array(
-            'body' => Param::get('body')
-        );
+        $params_comment = array('body' => Param::get('body'));
+        $params_thread = array('title' => Param::get('title'));
 
-        $comment = new Comment($params);
+        $comment = new Comment($params_comment);
         $comment_edit = Comment::getById($comment_id);
+
+        $thread = new Thread($params_thread);
+        $thread_edit = Thread::getById($thread_id);
+
 
         $page = Param::get('page_next', self::EDIT_COMMENT);
 
@@ -81,7 +86,7 @@ class CommentController extends AppController
             case self::EDIT_END_COMMENT:
                 $comment->body = Param::get('body');
                 $comment->id = $comment_id;
-                //$thread->title = Param::get('title');
+                $thread->title = Param::get('title');
                 try {
                     $comment->edit();
                 } catch (ValidationException $e) {
@@ -94,6 +99,34 @@ class CommentController extends AppController
                 break;
         }
 
+        $this->set(get_defined_vars());
+        $this->render($page);
+    }
+
+    public function delete()
+    {
+        check_user_session(get_session_username());
+        $comment = new Comment();
+        $comment_id = Param::get('id');
+        $page = Param::get('page_next', self::DELETE_COMMENT);
+
+        $thread_id = Param::get('thread_id');
+
+        switch ($page) {
+            case self::DELETE_COMMENT:
+                $comment->id = $comment_id;
+                $comment->user_id = $thread_id;
+                try {
+                    $comment->delete($comment_id);
+                } catch (ValidationException $e) {
+                    $page = self::DELETE_COMMENT;
+                }
+                break;
+
+            default:
+                throw new NotFoundException("{$page} is not found");                    
+                break;
+        }
         $this->set(get_defined_vars());
         $this->render($page);
     }

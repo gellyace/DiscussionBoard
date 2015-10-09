@@ -2,16 +2,10 @@
 <html class="comment_view">
 <head>
     <title></title>
-    <script type="text/javascript">
-    function deleteThread(id)
-    {
-        if(confirm('Sure To Remove This Record ?')) {
-            window.location.href="<?php char_to_html(url('thread/delete', array('thread_id' => $thread->id))) ?>";
-        }
-    }
-    </script>
+    
 </head>
 <body class="comment_view">
+
 <h1> <?php char_to_html($thread->title) ?> </h1>
 <!-- Edit and Delete Thread -->
 <?php if(($thread->user_id) == get_session_id()): ?>
@@ -22,14 +16,26 @@
 <?php foreach($comments as $k=>$v): ?>
     <div class ="comment">
         <div class="meta">
-            <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?> --------   <?php char_to_html($v->created) ?>            
+            <!-- Dsiplay Date Created and Modified -->
+            <?php if((($v->date_created) == ($v->date_modified)) || (($v->date_modified) == null) || (($v->date_modified) == (0)) ): ?>
+                <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?> --------   Date Created: <?php char_to_html($v->date_created) ?>
+            <?php else: ?>
+                <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?> --------   Date Modified: <?php char_to_html($v->date_modified) ?>
+            <?php endif ?>
             <!-- Edit and Delete Comment -->
             <?php if(($v->user_id) == get_session_id()): ?>
-                <a href="<?php char_to_html(url('comment/edit', array('id' => $v->id))) ?>">Edit</a>
-                <a href="javascript:deleteComment(<?php echo ($v->id); ?>)">Delete</a>
+                <a href="<?php char_to_html(url('comment/edit', array('id' => $v->id, 'thread_id' => $thread->id))) ?>">Edit</a>
+                <a href="javascript:deleteComment(<?php echo ($v->id)?>)">Delete</a>
             <?php endif ?>
         </div>
         <div><?php echo readable_text($v->body) ?></div>
+        <!-- Like and Unlike Comment -->
+        <span class="label label-primary"><?php echo "Total Likes: ".(Comment::countAllLikes($v->id))?></span><br>
+        <?php if($v->is_like): ?>
+            <a href="<?php char_to_html(url('likes/unlike', array('thread_id' => $thread->id, 'comment_id' => $v->id))) ?>">Unlike</a>
+        <?php else: ?>
+            <a href="<?php char_to_html(url('likes/like', array('thread_id' => $thread->id, 'comment_id' => $v->id))) ?>">Like</a>
+        <?php endif ?>
     </div>
 <?php endforeach ?>
 
@@ -75,4 +81,18 @@
 </a>
 
 </body>
+<script type="text/javascript">
+    function deleteThread(id)
+    {
+        if(confirm('Are you sure to DELETE this thread?')) {
+            window.location.href="<?php char_to_html(url('thread/delete', array('thread_id' => $thread->id))) ?>";
+        }
+    }
+    function deleteComment(id)
+    {
+        if(confirm('Are you sure to DELETE this comment?')) {
+            window.location.href="<?php char_to_html(url('comment/delete', array('id' => $v->id))) ?>";
+        }
+    }
+    </script>
 </html>

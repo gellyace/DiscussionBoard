@@ -12,7 +12,7 @@ class Comment extends AppModel
         ), 
     );
         
-    public static function getAll($offset, $limit, $thread_id)
+    public static function getAll($offset, $limit, $thread_id, $user_id)
     {
         $comments = array();
         $db = DB::conn();
@@ -23,6 +23,7 @@ class Comment extends AppModel
         
         foreach ($rows as $row) {
             $row['username'] = Users::getUsernameById($row['user_id']);
+            $row['is_like'] = Likes::isLiked($user_id, $row['id']);
             $comments[] = new self($row);
         }
         return $comments;
@@ -37,7 +38,13 @@ class Comment extends AppModel
     public static function sortComments()
     {
         $db = DB::conn();
-        return $db->rows('SELECT COUNT(*), thread_id FROM comment GROUP BY thread_id ORDER BY COUNT(*) DESC, created DESC LIMIT 10');
+        return $db->rows('SELECT COUNT(*), thread_id FROM comment GROUP BY thread_id ORDER BY COUNT(*) DESC, date_created DESC LIMIT 10');
+    }
+
+    public static function countAllLikes($comment_id)
+    {
+        $db = DB::conn();
+        return $db->value('SELECT COUNT(*) FROM liked WHERE comment_id = ?', array($comment_id));
     }
      
     public function write($thread_id)
@@ -47,18 +54,18 @@ class Comment extends AppModel
         }
 
         $db = DB::conn();
-        
+            
         $params = array(
             'thread_id' => $thread_id,
             'user_id' => get_session_id(),
-            'body' => $this->body
+            'body' => $this->body,
         );
 
         $db->insert(self::COMMENT_TABLE, $params);
         $db->commit();
     }
 
-    public static function getByID($comment_id)
+    public static function getById($comment_id)
     { 
         $db = DB::conn();
         $row = $db->row('SELECT * FROM comment WHERE id = ?', array($comment_id));
@@ -71,6 +78,7 @@ class Comment extends AppModel
 
     public function edit()
     {
+        $this->validate();
         if(!$this->validate()){
             throw new ValidationException("Invalid Comment");
         }
@@ -81,8 +89,18 @@ class Comment extends AppModel
         $params = array('body' => $this->body);
         $where_params = array('id' => $this->id);
 
-        $db->update(self::COMMENT_TABLE, $params, $where_params);
+         $db->query("UPDATE comment SET body = ?, date_modified = NOW() WHERE id = ?", array($this->body, $this->id));
+        //$db->update(self::COMMENT_TABLE, $params, $where_params);
       
+        $db->commit();
+    }
+
+    public function delete($id)
+    {                    
+        $db = DB::conn();
+        $db->begin();
+        $db->query("DELETE FROM liked  WHERE comment_id = ?", array($id));
+        $db->query("DELETE FROM comment WHERE id = ?", array($id));
         $db->commit();
     }
 }

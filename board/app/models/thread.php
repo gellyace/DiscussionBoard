@@ -57,10 +57,9 @@ class Thread extends AppModel
         $params = array(
             'title' => $this->title,
             'category' => $this->category,
-            'user_id' => $this->user_id
+            'user_id' => $this->user_id,
         );
-
-        $db->insert(self::THREAD_TABLE, $params);
+        
         $this->id = $db->lastInsertId(); 
 
         $comment->write($this->id);
@@ -84,7 +83,8 @@ class Thread extends AppModel
         );
         $where_params = array('id' => $this->id);
 
-        $db->update(self::THREAD_TABLE, $params, $where_params);
+        $db->query("UPDATE thread SET title = ?, category = ?, date_modified = NOW() WHERE id = ?", array($this->title, $this->category, $this->id));
+        //$db->update(self::THREAD_TABLE, $params, $where_params);
       
         $db->commit();
     }
@@ -104,7 +104,13 @@ class Thread extends AppModel
     {                    
         $db = DB::conn();
         $db->begin();
-        $db->query("DELETE FROM comment WHERE thread_id = ?", array($id));
+        $rows = $db->rows('SELECT id FROM comment WHERE thread_id = ?', array($id));
+
+        foreach ($rows as $row) {
+            Likes::deleteByCommentId($row['id']);
+        }
+        
+        $db->query("DELETE FROM comment WHERE thread_id = ?", array($id));        
         $db->query("DELETE FROM thread WHERE id = ?", array($id));
         $db->commit();
     }
@@ -118,7 +124,7 @@ class Thread extends AppModel
         foreach ($mostComments as $row) {
             $rows = $db->row("SELECT * FROM thread WHERE id=? ", array($row['thread_id']));
             $rows['count'] = $row['COUNT(*)'];
-            $rows['created'] = $rows['created'];
+            $rows['date_created'] = $rows['date_created'];
             $rows['category'] = $rows['category'];
             $threads[] = new self($rows);
         }
