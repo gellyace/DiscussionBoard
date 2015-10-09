@@ -24,6 +24,8 @@
         </li>
             <ul>
                 <li>Category: <?php char_to_html($v->category) ?> </li>
+                <li>Date Created: <?php char_to_html($v->date_created) ?> </li>
+                <li>Date Modified: <?php char_to_html($v->date_modified) ?> </li>
             </ul>
         </ul>
         
@@ -33,10 +35,11 @@
     <?php foreach (Thread::searchComment($keyword) as $v): ?>
         <ul>
         <li> <!-- comment matches -->
-            Body:  <?php char_to_html($v->body) ?>                       
+            Body:  <?php char_to_html($v->body) ?>                     
         </li>
             <ul>
-
+                <li>Date Created: <?php char_to_html($v->date_created) ?> </li>
+                <li>Date Modified: <?php char_to_html($v->date_modified) ?> </li>  
             </ul>
         </ul>
     <?php endforeach ?>    
@@ -44,5 +47,5 @@
             
 <div class="text-center">
 <hr>
-<a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/index')) ?>"> Back to All Threads </a>
+    <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/index')) ?>"> Back to All Threads </a>
 </div>

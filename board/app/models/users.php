@@ -129,4 +129,34 @@ class Users extends AppModel
         return $row['id'];
     }
 
+    public static function viewOwnProfile()
+    {
+        $users = array();
+        $user_id = get_session_id();
+
+        $db = DB::conn();
+        $rows = $db->rows('SELECT * FROM user WHERE id = ?', array($user_id));
+
+        foreach ($rows as $row) {
+            $users[] = new self($row);
+        }
+        return $users; 
+    }
+
+    public static function viewOwnThreads()
+    {
+        $user_threads = array();
+        $user_id = get_session_id();
+
+        $db = DB::conn();
+        $rows = $db->rows('SELECT * FROM thread WHERE user_id = ?', array($user_id));
+
+        foreach ($rows as $row) {
+            $user_threads[] = new self($row);
+        }
+        return $user_threads; 
+    }
+
+
+
 }

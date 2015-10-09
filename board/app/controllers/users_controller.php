@@ -6,6 +6,9 @@ class UsersController extends AppController
     const REGISTER_END_USER = 'register_end';
     const LOGIN_USER = 'login';
     const LOGIN_END_USER = 'login_end';
+    const VIEW_OWN = 'view_end';
+    const EDIT_OWN = 'edit';
+    const VIEW_OWN_END = 'edit_end';
 
     public function login() 
     {   
@@ -73,5 +76,32 @@ class UsersController extends AppController
         session_destroy();
         redirect('login');
         exit();
+    }
+
+    public function view_end()
+    {
+        check_user_session(get_session_username());
+        $user = new Users();
+        $user_id = get_session_id();
+
+        $page = Param::get('page_next', self::VIEW_OWN);
+        $users = Users::viewOwnProfile();
+        $usersThread = Users::viewOwnThreads();
+        switch ($page) {
+            case self::VIEW_OWN:
+                $user->id = $user_id;
+                try {
+                    Users::viewOwnProfile();
+                } catch (ValidationException $e) {
+                    $page = self::VIEW_OWN;
+                }
+                break;
+
+            default:
+                throw new NotFoundException("{$page} is not found");                    
+                break;
+        }
+        $this->set(get_defined_vars());
+        $this->render($page);
     }  
 }

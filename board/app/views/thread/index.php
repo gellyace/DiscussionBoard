@@ -35,7 +35,6 @@
             <div class="text-center">
             <hr>
             <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/create')) ?>"> Create </a>
-            <a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/logout')) ?>"> Logout </a>
             <br>
             <ul class="pagination">
                 <ul class="pager">
@@ -64,23 +63,11 @@
         </div>
         <!-- search area-->
         <div class="col-sm-3">
-        <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/search')) ?>"> Go to Search Page </a> 
-         <!--
-        <form role="form" name="search" action="<?php char_to_html(url('')) ?>" method="post">
-             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" name="keyword" value="<?php char_to_html(Param::get('keyword')) ?>" onFocus="this.value=''"/>
-            <div class="input-group-btn">
-                <input type="hidden" name="page_next" value="search_end"/>
-                <button type="submit" class="btn btn-primary">Submit</button>  
-               <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/search')) ?>"> Go </a> 
-            
-                <input type="hidden" name="page_next" value="search_end"/>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                -->
-            </div>
-            </div>
-        </form>
-        
+            <a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/view_end')) ?>"> Go to Your Profile </a> 
+            <br><br>
+            <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/search')) ?>"> Go to Search Page </a> 
+            <br><br>
+            <a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/logout')) ?>"> Logout </a>
         </div>
     </div>
 </div>

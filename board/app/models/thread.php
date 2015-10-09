@@ -137,7 +137,7 @@ class Thread extends AppModel
         $db = DB::conn();
         $db->begin();
         
-        $rows = $db->rows("SELECT username,firstname,lastname,email FROM user WHERE username LIKE ? ", array("%{$keyword}%"));
+        $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? ", array("%{$keyword}%"));
         
         foreach ($rows as $row) {
             $users[] = new self($row);
@@ -151,7 +151,7 @@ class Thread extends AppModel
         $db = DB::conn();
         $db->begin();
         
-        $rows = $db->rows("SELECT title,category FROM thread WHERE title LIKE ? OR category LIKE ?", array("%{$keyword}%", "%{$keyword}%"));
+        $rows = $db->rows("SELECT * FROM thread WHERE title LIKE ? OR category LIKE ?", array("%{$keyword}%", "%{$keyword}%"));
         
         foreach ($rows as $row) {
             $threads[] = new self($row);
@@ -165,7 +165,7 @@ class Thread extends AppModel
         $db = DB::conn();
         $db->begin();
         
-        $rows = $db->rows("SELECT body FROM comment WHERE body LIKE ? ", array("%{$keyword}%"));
+        $rows = $db->rows("SELECT * FROM comment WHERE body LIKE ? ", array("%{$keyword}%"));
         
         foreach ($rows as $row) {
             $comments[] = new self($row);
