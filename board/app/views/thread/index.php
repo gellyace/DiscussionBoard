@@ -6,22 +6,21 @@
 <body class="thread_index">
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
+        <!-- list of all trending threads by comment count-->
+        <div class="col-sm-3">
             <h5>Trending Threads:</h5>
             <ul>
-            <!-- list of all trending threads by comment count-->
                 <?php foreach ($trending as $v): ?>
                 <li>
                     <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
                     <?php char_to_html($v->title) ?></a>
                     <span class="label label-primary"><?php char_to_html($v->count)?></span>
-                    <?php char_to_html($v->category)?> 
-                    
+                    <?php char_to_html($v->category)?>   
                 </li>
                 <?php endforeach ?>
             </ul>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <h1>All threads</h1>
             <ul>
             <!-- list of all threads -->
@@ -62,6 +61,19 @@
                 </ul> <!-- end of pager -->
             </ul> <!-- end of pagination -->
             </div>
+        </div>
+        <!-- search area-->
+        <div class="col-sm-3">
+        <form role="form" name="search" action="<?php char_to_html(url('')) ?>" method="post">
+             <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="keyword" value="<?php char_to_html(Param::get('keyword')) ?>" onFocus="this.value=''"/>
+            <div class="input-group-btn">
+                <input type="hidden" name="page_next" value="search_end"/>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            </div>
+        </form>
+        <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/search_end')) ?>"> Search </a>
         </div>
     </div>
 </div>

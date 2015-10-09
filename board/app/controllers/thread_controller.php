@@ -10,6 +10,7 @@ class ThreadController extends AppController
     const EDIT_THREAD = 'edit';
     const EDIT_END_THREAD = 'edit_end';
     const DELETE_THREAD = 'delete_end';
+    const SEARCH = "search_end";
 
     public function index()
     {
@@ -122,5 +123,31 @@ class ThreadController extends AppController
         }
         $this->set(get_defined_vars());
         $this->render($page);
+    }
+
+    public function search_end()
+    {
+        check_user_session(get_session_username());
+        
+        $thread = new Thread();
+        $page = Param::get('page_next', self::SEARCH);
+
+        switch ($page) {
+            case self::SEARCH:
+                $keyword = Param::get('keyword');
+                try {
+                    $thread = Thread::searchProfile($keyword);
+                } catch (ValidationException $e) {
+                    $page = self::SEARCH;
+                }
+                break;
+
+            default:
+                throw new NotFoundException("{$page} is not found");                    
+                break;
+        }
+        $this->set(get_defined_vars());
+        $this->render($page);
+        
     }
 }
