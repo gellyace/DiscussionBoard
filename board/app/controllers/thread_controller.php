@@ -16,6 +16,8 @@ class ThreadController extends AppController
     public function index()
     {
         check_user_session(get_session_username());
+        $checkStatus = Users::checkStatus();
+
         $page = Param::get('page', self::DEFAULT_PAGE);
         $pagination = new SimplePagination($page, self::PER_PAGE);
 

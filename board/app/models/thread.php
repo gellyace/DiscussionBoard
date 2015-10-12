@@ -60,6 +60,8 @@ class Thread extends AppModel
             'user_id' => $this->user_id,
         );
         
+        $db->insert(self::THREAD_TABLE, $params);
+
         $this->id = $db->lastInsertId(); 
 
         $comment->write($this->id);
@@ -137,7 +139,7 @@ class Thread extends AppModel
         $db = DB::conn();
         $db->begin();
         
-        $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? ", array("%{$keyword}%"));
+        $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? AND id != ?", array("%{$keyword}%", self::getInactiveUserId()));
         
         foreach ($rows as $row) {
             $users[] = new self($row);
@@ -151,7 +153,7 @@ class Thread extends AppModel
         $db = DB::conn();
         $db->begin();
         
-        $rows = $db->rows("SELECT * FROM thread WHERE title LIKE ? OR category LIKE ?", array("%{$keyword}%", "%{$keyword}%"));
+        $rows = $db->rows("SELECT * FROM thread WHERE (title LIKE ? AND user_id != ? )OR (category LIKE ? AND user_id != ?)", array("%{$keyword}%", self::getInactiveUserId(), "%{$keyword}%", self::getInactiveUserId()));
         
         foreach ($rows as $row) {
             $threads[] = new self($row);
@@ -165,7 +167,7 @@ class Thread extends AppModel
         $db = DB::conn();
         $db->begin();
         
-        $rows = $db->rows("SELECT * FROM comment WHERE body LIKE ? ", array("%{$keyword}%"));
+        $rows = $db->rows("SELECT * FROM comment WHERE body LIKE ? AND user_id != ?", array("%{$keyword}%", self::getInactiveUserId()));
         
         foreach ($rows as $row) {
             $comments[] = new self($row);
@@ -173,5 +175,24 @@ class Thread extends AppModel
         return $comments;  
     }
 
+    public static function getInactiveUserId()
+    {
+        $db = DB::conn();
+        $row = $db->row('SELECT id FROM user WHERE status = ?', array('Inactive'));
+        return $row['id'];
+    }
+
+    public static function getAllInactive()
+    {
+        $users = array();
+        $db = DB::conn();
+        $rows = $db->rows("SELECT * FROM user WHERE status = 'Inactive'");
+
+        foreach ($rows as $row) {
+            $users[] = new self($row);
+        }
+
+        return $users;
+    }
 
 }

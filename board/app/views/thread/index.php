@@ -27,8 +27,7 @@
                 <?php foreach ($threads as $v): ?>
                 <li>
                     <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
-                    <?php char_to_html($v->title) ?> ----> Category: <?php char_to_html($v->category) ?></a>        
-                </li>
+                    <?php char_to_html($v->title) ?> ----> Category: <?php char_to_html($v->category) ?></a>  
                 <?php endforeach ?>
             </ul>
             <!-- pagination -->
@@ -63,7 +62,7 @@
         </div>
         <!-- search area-->
         <div class="col-sm-3">
-            <a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/view_end')) ?>"> Go to Your Profile </a> 
+            <a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/view_end', array('user_id' => get_session_id()))) ?>"> Go to Your Profile </a> 
             <br><br>
             <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/search')) ?>"> Go to Search Page </a> 
             <br><br>

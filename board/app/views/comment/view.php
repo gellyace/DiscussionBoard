@@ -18,9 +18,13 @@
         <div class="meta">
             <!-- Dsiplay Date Created and Modified -->
             <?php if((($v->date_created) == ($v->date_modified)) || (($v->date_modified) == null) || (($v->date_modified) == (0)) ): ?>
-                <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?> --------   Date Created: <?php char_to_html($v->date_created) ?>
+                <?php char_to_html($k + 1) ?>: 
+                <a href="<?php char_to_html(url('users/view_end', array('user_id' => $v->user_id))) ?>"><?php echo $v->username ?></a> --------   
+                Date Created: <?php char_to_html($v->date_created) ?>
             <?php else: ?>
-                <?php char_to_html($k + 1) ?>: <?php char_to_html($v->username) ?> --------   Date Modified: <?php char_to_html($v->date_modified) ?>
+                <?php char_to_html($k + 1) ?>: 
+                <a href="<?php char_to_html(url('users/view_end', array('user_id' => $v->user_id))) ?>"><?php echo $v->username ?></a> --------   
+                Date Modified: <?php char_to_html($v->date_modified) ?>
             <?php endif ?>
             <!-- Edit and Delete Comment -->
             <?php if(($v->user_id) == get_session_id()): ?>

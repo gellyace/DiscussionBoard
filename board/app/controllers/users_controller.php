@@ -7,8 +7,9 @@ class UsersController extends AppController
     const LOGIN_USER = 'login';
     const LOGIN_END_USER = 'login_end';
     const VIEW_OWN = 'view_end';
-    const EDIT_OWN = 'edit';
-    const VIEW_OWN_END = 'edit_end';
+    const EDIT = 'edit';
+    const EDIT_END = 'edit_end';
+    const DEACTIVATE_USER = "deactivate_end";
 
     public function login() 
     {   
@@ -82,16 +83,16 @@ class UsersController extends AppController
     {
         check_user_session(get_session_username());
         $user = new Users();
-        $user_id = get_session_id();
-
+        $user_id = Param::get('user_id');
         $page = Param::get('page_next', self::VIEW_OWN);
-        $users = Users::viewOwnProfile();
-        $usersThread = Users::viewOwnThreads();
+        $users = Users::viewProfile($user_id);
+        $usersThread = Users::viewThreads($user_id);
         switch ($page) {
             case self::VIEW_OWN:
-                $user->id = $user_id;
+                $user->id = Param::get('user_id');
                 try {
-                    Users::viewOwnProfile();
+                    $users = Users::viewProfile($user_id);
+                    $usersThread = Users::viewThreads($user_id);
                 } catch (ValidationException $e) {
                     $page = self::VIEW_OWN;
                 }
@@ -103,5 +104,74 @@ class UsersController extends AppController
         }
         $this->set(get_defined_vars());
         $this->render($page);
-    }  
+    }
+
+    public function edit() 
+    {
+        check_user_session(get_session_username());
+        $user_id = get_session_id();
+        $page = Param::get('page_next', self::EDIT);
+        
+        $params = array(
+            'username' => Param::get('username'),
+            'firstname' => Param::get('firstname'),
+            'lastname' => Param::get('lastname'),
+            'email' => Param::get('email'),
+            'password' => Param::get('password')
+        );
+
+        $user = new Users($params);
+        $user_edit = Users::getById($user_id);
+        
+        
+        switch ($page) {
+            case self::EDIT:
+                break;
+                
+            case self::EDIT_END:
+                $user_edit->id = get_session_id();
+                $user_edit->username = Param::get('username');
+                $user_edit->firstname = Param::get('firstname');
+                $user_edit->lastname = Param::get('lastname');
+                $user_edit->email = Param::get('email');
+                $user_edit->password = Param::get('password');
+                try {
+                    $user_edit->edit();
+                } catch (ValidationException $e) {
+                    $page=self::EDIT_END;
+                }
+                break;
+
+            default:
+                throw new RecordNotFoundException("{$page} is not found");                    
+                break;
+        }
+            $this->set(get_defined_vars());
+            $this->render($page);
+    }
+
+    public function deactivate()
+      {
+            check_user_session(get_session_username());
+            $user = new Users();
+            $user_id = Param::get('id');
+            $page = Param::get('page_next', self::DEACTIVATE_USER);
+
+            switch ($page) {
+                case self::DEACTIVATE_USER:
+                    $user->id = $user_id;
+                    try {
+                        $user->deactivate();
+                    } catch (ValidationException $e) {
+                        $page = self::DEACTIVATE_USER;
+                    }
+                    break;
+
+                default:
+                    throw new NotFoundException("{$page} is not found");                    
+                    break;
+            }
+            $this->set(get_defined_vars());
+            $this->render($page);
+      }  
 }

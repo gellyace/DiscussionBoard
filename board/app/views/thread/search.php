@@ -19,7 +19,7 @@
 
 <br><br><br><br><hr>
 <div class="text-center">
-<a href="<?php char_to_html(url('thread/index', array('thread_id' => $thread->id))) ?>">
+<a href="<?php char_to_html(url('thread/index')) ?>">
     &larr; Go to All Threads
 </a>
 </div>

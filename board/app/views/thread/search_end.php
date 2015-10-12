@@ -47,5 +47,5 @@
             
 <div class="text-center">
 <hr>
-    <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/index')) ?>"> Back to All Threads </a>
+    <a class="btn btn-large btn-primary" href="<?php char_to_html(url('thread/search')) ?>"> Back to Search Page </a>
 </div>

@@ -96,6 +96,7 @@ class Users extends AppModel
             $this->user_validated = false;
             throw new RecordNotFoundException("Invalid Information");
         }
+       
         return new self($user_account);
     }
 
@@ -129,10 +130,11 @@ class Users extends AppModel
         return $row['id'];
     }
 
-    public static function viewOwnProfile()
+    public static function viewProfile($user_id)
     {
         $users = array();
-        $user_id = get_session_id();
+        $session_id = get_session_id();
+
 
         $db = DB::conn();
         $rows = $db->rows('SELECT * FROM user WHERE id = ?', array($user_id));
@@ -143,10 +145,10 @@ class Users extends AppModel
         return $users; 
     }
 
-    public static function viewOwnThreads()
+    public static function viewThreads($user_id)
     {
         $user_threads = array();
-        $user_id = get_session_id();
+        $session_id = get_session_id();
 
         $db = DB::conn();
         $rows = $db->rows('SELECT * FROM thread WHERE user_id = ?', array($user_id));
@@ -157,6 +159,93 @@ class Users extends AppModel
         return $user_threads; 
     }
 
+    public static function getById($user_id)
+    {
+        $db = DB::conn();
+        $row = $db->row('SELECT * FROM user WHERE id = ?', array($user_id));
+        
+        if(!$row){
+            throw new RecordNotFoundException('No Record Found');
+        }
+        return new self($row);
+    }
+
+    public static function get($id)
+    {
+        $db = DB::conn();
+        $row = $db->row('SELECT * FROM user WHERE id = ?', array($id));
+
+        if(!$row){
+            throw new RecordNotFoundException('No Record Found');
+        }
+        return new self($row);
+    }
+
+    public function edit()
+    {
+        if (!$this->validate()) {
+            throw new ValidationException('Update not valid');
+        }
+
+        $hashedPassword = self::generateHash($this->password); //encrypts password before storing it
+        $id = get_session_id();
+        $db = DB::conn();
+        $db->begin();
+
+        $params = array(
+            'username' => $this->username,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'password' => $hashedPassword,
+        );
+        $where_params = array('id' => get_session_id());
 
 
+        //$db->query("UPDATE user SET username = ?, firstname = ?, lastname = ?, email = ?, password = ? WHERE id = ?", array($this->username, $this->firstname, $this->lastname, $this->email, $hashedpassword, $id));
+
+        $db->update(self::USERS_TABLE, $params,$where_params);
+        $db->commit();
+    }
+
+    public function deactivate()
+    {
+        if (!$this->validate()) {
+            throw new ValidationException('Update not valid');
+        }
+
+        $id = get_session_id();
+        $db = DB::conn();
+       
+        $params = array(
+            'status' => 'Inactive',
+        );
+        $where_params = array('id' => $id);
+
+        $db->update(self::USERS_TABLE, $params,$where_params);
+    }
+
+    public static function reactivate()
+    {
+        $id = get_session_id();
+        $db = DB::conn();
+       
+        $params = array(
+            'status' => 'Active',
+        );
+        $where_params = array('id' => $id);
+
+        $db->update(self::USERS_TABLE, $params,$where_params);
+    }
+
+    public static function checkStatus()
+    {
+        $db = DB::conn();
+        $username = get_session_username();
+        $user_status = $db->row('SELECT status FROM user WHERE username = ?', array($username));
+
+        if ($user_status['status'] == 'Inactive'){
+                self::reactivate();
+        }
+    }
 }
