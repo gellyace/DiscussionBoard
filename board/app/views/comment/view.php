@@ -15,6 +15,7 @@
 <!-- Display All Comments inside this thread -->
 <?php foreach($comments as $k=>$v): ?>
     <div class ="comment">
+    <?php if (!in_array(($v->user_id),Thread::getAllInactive())) : ?> <!-- added-->
         <div class="meta">
             <!-- Dsiplay Date Created and Modified -->
             <?php if((($v->date_created) == ($v->date_modified)) || (($v->date_modified) == null) || (($v->date_modified) == (0)) ): ?>
@@ -40,6 +41,7 @@
         <?php else: ?>
             <a href="<?php char_to_html(url('likes/like', array('thread_id' => $thread->id, 'comment_id' => $v->id))) ?>">Like</a>
         <?php endif ?>
+    <?php endif ?>
     </div>
 <?php endforeach ?>
 

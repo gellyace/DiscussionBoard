@@ -16,9 +16,10 @@ class Comment extends AppModel
     {
         $comments = array();
         $db = DB::conn();
+        $user = implode(',',array_values(Thread::getAllInactive())); // added
         $rows = $db->rows(
-            sprintf("SELECT * FROM comment WHERE thread_id=? LIMIT %d, %d", $offset, $limit),
-            array($thread_id)
+            sprintf("SELECT * FROM comment WHERE thread_id=? and user_id not in (?) LIMIT %d, %d", $offset, $limit),
+            array($thread_id, $user) // edited
         );
         
         foreach ($rows as $row) {
@@ -38,7 +39,9 @@ class Comment extends AppModel
     public static function sortComments()
     {
         $db = DB::conn();
-        return $db->rows('SELECT COUNT(*), thread_id FROM comment GROUP BY thread_id ORDER BY COUNT(*) DESC, date_created DESC LIMIT 10');
+        $user = implode(',',array_values(Thread::getAllInactive())); // added
+        return $db->rows('SELECT COUNT(*), thread_id FROM comment where user_id NOT IN (?) 
+                GROUP BY thread_id ORDER BY COUNT(*) DESC, date_created DESC LIMIT 10', array($user)); //edited
     }
 
     public static function countAllLikes($comment_id)

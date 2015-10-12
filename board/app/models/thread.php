@@ -186,10 +186,10 @@ class Thread extends AppModel
     {
         $users = array();
         $db = DB::conn();
-        $rows = $db->rows("SELECT * FROM user WHERE status = 'Inactive'");
+        $rows = $db->rows("SELECT id FROM user WHERE status = 'Inactive'");
 
         foreach ($rows as $row) {
-            $users[] = new self($row);
+            $users[] = $row['id'];
         }
 
         return $users;

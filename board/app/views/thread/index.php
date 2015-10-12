@@ -10,13 +10,15 @@
         <div class="col-sm-3">
             <h5>Trending Threads:</h5>
             <ul>
-                <?php foreach ($trending as $v): ?>
+            <?php foreach ($trending as $v): ?>
+                <?php if (!in_array(($v->user_id),Thread::getAllInactive())) : ?> <!-- added-->
                 <li>
                     <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
                     <?php char_to_html($v->title) ?></a>
                     <span class="label label-primary"><?php char_to_html($v->count)?></span>
                     <?php char_to_html($v->category)?>   
                 </li>
+                <?php endif ?><!-- added-->
                 <?php endforeach ?>
             </ul>
         </div>
@@ -25,9 +27,11 @@
             <ul>
             <!-- list of all threads -->
                 <?php foreach ($threads as $v): ?>
+                <?php if (!in_array(($v->user_id),Thread::getAllInactive())) : ?> <!-- added-->
                 <li>
                     <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
                     <?php char_to_html($v->title) ?> ----> Category: <?php char_to_html($v->category) ?></a>  
+                <?php endif ?><!-- added-->
                 <?php endforeach ?>
             </ul>
             <!-- pagination -->

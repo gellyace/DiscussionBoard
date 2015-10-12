@@ -19,13 +19,22 @@
             <?php if (!empty($user_edit->validation_errors['email']['format'])): ?>
                 <div><em>Email Address</em> must follow the proper (alphanumeric@word.word) format.</div>
             <? endif ?>
-            <!-- Generate Error Message if username or email already exists -->
-            <?php if (!empty($user_edit->validation_errors['username']['exists_username'])): ?>
-                <div><em>Username</em> already exists.</div>
-            <? endif ?>
-            <?php if (!empty($user_edit->validation_errors['email']['exists_email'])): ?>
-                <div><em>Email</em> already exists.</div>
-            <? endif ?>
+
+            <!-- Generate Error Message if username or email already exists -->            
+            <?php if(($user_edit->username) == (Users::getUsernameById(get_session_id())) ):?>
+                <?php if (!empty($user_edit->validation_errors['username']['exists_username'])): ?>
+                    <div><em>Username</em> already exists.</div>
+                <? endif ?>
+            <?php endif ?>
+
+            <?php if(($user_edit->email) == (Users::getEmailById(get_session_id())) ):?>
+                <?php if (!empty($user_edit->validation_errors['email']['exists_email'])): ?>
+                    <div><em>Email</em> already exists.</div>
+                <? endif ?>
+            <?php endif ?>
+       
+            
+
             <!-- Generate Error Message if Textbox fields are empty -->
             <?php if (!empty($user_edit->validation_errors['username']['length'])): ?>
                 <div><em>Username</em> must be between
@@ -60,12 +69,6 @@
     </div>
 </div>
 <? endif ?> 
-
-<?php 
-
-var_dump($user_id);
-
-?>
 
 <!-- Form Block -->
 <div class="row">
