@@ -117,7 +117,7 @@ class UsersController extends AppController
             'firstname' => Param::get('firstname'),
             'lastname' => Param::get('lastname'),
             'email' => Param::get('email'),
-            'password' => Param::get('password')
+            'password' => Param::get('password'),
         );
 
         $user = new Users($params);
@@ -138,7 +138,7 @@ class UsersController extends AppController
                 try {
                     $user_edit->edit();
                 } catch (ValidationException $e) {
-                    $page=self::EDIT_END;
+                    $page=self::EDIT;
                 }
                 break;
 
