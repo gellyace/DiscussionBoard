@@ -16,7 +16,10 @@ class Thread extends AppModel
     {
         $threads = array();
         $db = DB::conn();
-        $rows = $db->rows( sprintf("SELECT * FROM thread ORDER BY id LIMIT %d, %d", $offset, $limit));
+        $user = implode(',',array_values(self::getAllInactive())); // added
+
+        $rows = $db->rows( sprintf("SELECT * FROM thread WHERE user_id not in (?) LIMIT %d, %d", 
+            $offset, $limit), array($user));
 
         foreach ($rows as $row) {
             $threads[] = new self($row);
@@ -27,7 +30,8 @@ class Thread extends AppModel
     public static function countAll()
     {
         $db = DB::conn();
-        return $db->value('SELECT COUNT(*) FROM thread');
+        $user = implode(',',array_values(self::getAllInactive())); // added
+        return $db->value('SELECT COUNT(*) FROM thread WHERE user_id not in (?)', array($user));
     }
 
     public static function get($id)
@@ -122,9 +126,10 @@ class Thread extends AppModel
         $threads = array();
         $db = DB::conn();
         $mostComments = Comment::sortComments();
+        $user = implode(',',array_values(self::getAllInactive())); // added
         
         foreach ($mostComments as $row) {
-            $rows = $db->row("SELECT * FROM thread WHERE id=? ", array($row['thread_id']));
+            $rows = $db->row("SELECT * FROM thread WHERE id=?", array($row['thread_id']));
             $rows['count'] = $row['COUNT(*)'];
             $rows['date_created'] = $rows['date_created'];
             $rows['category'] = $rows['category'];

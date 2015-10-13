@@ -8,7 +8,7 @@ class LikesController extends AppController
 		$comment_id = Param::get('comment_id');
 		$user_id = get_session_id();
 
-		Likes::like($user_id, $comment_id);
+		Likes::like($user_id, $comment_id, $thread_id);
  		redirect('/comment/view?thread_id='.$thread_id);
 	}
 
@@ -19,7 +19,7 @@ class LikesController extends AppController
 		$comment_id = Param::get('comment_id');
 		$user_id = get_session_id();
 		
-		Likes::unlike($user_id, $comment_id);
+		Likes::unlike($user_id, $comment_id, $thread_id);
 		redirect('/comment/view?thread_id='.$thread_id);
 	}
 }

@@ -33,14 +33,15 @@ class Comment extends AppModel
     public static function countAll($thread_id)
     {
         $db = DB::conn();
-        return $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ?', array($thread_id));
+        $user = implode(',',array_values(Thread::getAllInactive())); // added
+        return $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ? AND user_id not in (?)', array($thread_id, $user));
     }
 
     public static function sortComments()
     {
         $db = DB::conn();
         $user = implode(',',array_values(Thread::getAllInactive())); // added
-        return $db->rows('SELECT COUNT(*), thread_id FROM comment where user_id NOT IN (?) 
+        return $db->rows('SELECT COUNT(*), thread_id FROM comment WHERE user_id not in (?)
                 GROUP BY thread_id ORDER BY COUNT(*) DESC, date_created DESC LIMIT 10', array($user)); //edited
     }
 

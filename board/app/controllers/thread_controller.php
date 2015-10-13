@@ -2,7 +2,7 @@
 class ThreadController extends AppController 
 {
     // Declare constants to avoid the use of "magic numbers"
-    const PER_PAGE = 5;
+    const PER_PAGE = 10;
     const DEFAULT_PAGE = 1;
 
     const CREATE_THREAD = 'create';
