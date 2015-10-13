@@ -112,17 +112,7 @@ class UsersController extends AppController
         $user_id = get_session_id();
         $page = Param::get('page_next', self::EDIT);
         
-        $params = array(
-            'username' => Param::get('username'),
-            'firstname' => Param::get('firstname'),
-            'lastname' => Param::get('lastname'),
-            'email' => Param::get('email'),
-            'password' => Param::get('password'),
-        );
-
-        $user = new Users($params);
         $user_edit = Users::getById($user_id);
-        
         
         switch ($page) {
             case self::EDIT:
@@ -130,16 +120,16 @@ class UsersController extends AppController
                 
             case self::EDIT_END:
                 $user_edit->id = get_session_id();
-                $user_edit->username = Param::get('username');
                 $user_edit->firstname = Param::get('firstname');
                 $user_edit->lastname = Param::get('lastname');
-                $user_edit->email = Param::get('email');
-                $user_edit->password = Param::get('password');
+                $user_edit->current_password = Param::get('password');
+                $user_edit->new_password = Param::get('passwordNew');
                 try {
                     $user_edit->edit();
                 } catch (ValidationException $e) {
                     $page=self::EDIT;
-                }
+                    break;
+                } 
                 break;
 
             default:

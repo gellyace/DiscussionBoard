@@ -4,10 +4,6 @@
     <div class="alert alert-danger alert-block fade in alert-dismissable" style="width: 530px">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4 class="alert-heading">Validation error!</h4>
-            <!-- Generate Error Message if username contains characters other than numbers and letters -->
-            <?php if (!empty($user_edit->validation_errors['username']['alphanumeric'])): ?>
-                <div><em>Username</em> must only contain alphanumeric (a-z, A-Z, 0-9) characters.</div>
-            <? endif ?>
             <!-- Generate Error Message if firstname or lastname contain characters other than letters and extra spaces -->
             <?php if (!empty($user_edit->validation_errors['firstname']['name'])): ?>
                 <div><em>Firstname</em> must only contain letters (a-z, A-Z).</div>
@@ -15,33 +11,7 @@
             <?php if (!empty($user_edit->validation_errors['lastname']['name'])): ?>
                 <div><em>Lastname</em> must only contain letters (a-z, A-Z).</div>
             <? endif ?>
-            <!-- Generate Error Message if email address does not follow the alphanumeric@word.word format -->
-            <?php if (!empty($user_edit->validation_errors['email']['format'])): ?>
-                <div><em>Email Address</em> must follow the proper (alphanumeric@word.word) format.</div>
-            <? endif ?>
-
-            <!-- Generate Error Message if username or email already exists -->            
-            <?php if(($user_edit->username) == (Users::getUsernameById(get_session_id())) ):?>
-                <?php if (!empty($user_edit->validation_errors['username']['exists_username'])): ?>
-                    <div><em>Username</em> already exists.</div>
-                <? endif ?>
-            <?php endif ?>
-
-            <?php if(($user_edit->email) == (Users::getEmailById(get_session_id())) ):?>
-                <?php if (!empty($user_edit->validation_errors['email']['exists_email'])): ?>
-                    <div><em>Email</em> already exists.</div>
-                <? endif ?>
-            <?php endif ?>
-       
-            
-
             <!-- Generate Error Message if Textbox fields are empty -->
-            <?php if (!empty($user_edit->validation_errors['username']['length'])): ?>
-                <div><em>Username</em> must be between
-                    <?php char_to_html($user_edit->validation['username']['length'][1]) ?> and
-                    <?php char_to_html($user_edit->validation['username']['length'][2]) ?> characters in length.
-                </div>
-            <? endif ?>
             <?php if (!empty($user_edit->validation_errors['firstname']['length'])): ?>
                 <div><em>Firstname</em> must be between
                     <?php char_to_html($user_edit->validation['firstname']['length'][1]) ?> and
@@ -54,14 +24,16 @@
                     <?php char_to_html($user_edit->validation['lastname']['length'][2]) ?> characters in length.
                 </div>
             <? endif ?>
-            <?php if (!empty($user_edit->validation_errors['email']['length'])): ?>
-                <div><em>Email Address</em> must be between
-                    <?php char_to_html($user_edit->validation['email']['length'][1]) ?> and
-                    <?php char_to_html($user_edit->validation['email']['length'][2]) ?> characters in length.
+            <!--
+            <?php if (!empty($user_edit->validation_errors['passwordNew']['length'])): ?>
+                <div><em>New Password</em> must be between
+                    <?php char_to_html($user_edit->validation['passwordNew']['length'][1]) ?> and
+                    <?php char_to_html($user_edit->validation['passwordNew']['length'][2]) ?> characters in length.
                 </div>
             <? endif ?>
+            -->
             <?php if (!empty($user_edit->validation_errors['password']['length'])): ?>
-                <div><em>Password</em> must be between
+                <div><em>New Password</em> must be between
                     <?php char_to_html($user_edit->validation['password']['length'][1]) ?> and
                     <?php char_to_html($user_edit->validation['password']['length'][2]) ?> characters in length.
                 </div>
@@ -70,6 +42,19 @@
 </div>
 <? endif ?> 
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+        function enable_text(status)
+        {
+            status=!status; 
+            document.login.passwordNew.disabled = status;
+        }
+    </script>
+</head>
+<body onload='enable_text(false);'>
 <!-- Form Block -->
 <div class="row">
     <div class="col-md-3 col-md-offset-4">
@@ -83,15 +68,15 @@
                 <label class="form"><span class="glyphicon glyphicon-user"></span>  Last Name:</label><br>
                     <input type="text" name="lastname" placeholder="Enter lastname" value="<?php char_to_html($user_edit->lastname) ?>" required>
                 <hr>
-                <label class="form"><span class="glyphicon glyphicon-user"></span>  Username:</label><br>
-                    <input type="text" name="username" placeholder="Enter username" value="<?php char_to_html($user_edit->username) ?>" required>
-                <hr>
-                <label class="form"><span class="glyphicon glyphicon-envelope"></span>  Email Address:</label><br>
-                    <input type="text" name="email" placeholder="Enter email" value="<?php char_to_html($user_edit->email) ?>" required>
-                <hr>
+
                 <label class="form"><span class="glyphicon glyphicon-lock"></span>  Password:</label><br>
-                    <input type="password" name="password" placeholder="Enter OLD or NEW Password" value="<?php char_to_html(Param::get('password')) ?>" required>
+                    <input type="password" id="password" name="password" placeholder="Enter password" value="" required >
                 <hr>
+                <label class="form"><span class="glyphicon glyphicon-lock"></span>  New Password:</label><br>
+                    <input type="password" id="passwordNew" name="passwordNew" placeholder="Enter password" value="" required>
+                    <input type="checkbox" name="others" onclick="enable_text(this.checked)"><span class="glyphicon glyphicon-pencil"></span>
+                <hr>
+
                 <div class="col-sm-offset-4">
                     <input type="hidden" name="page_next" value="edit_end">
                     <button type="submit" class="btn btn-primary"> Submit </button>
@@ -105,5 +90,5 @@
         </div>
     </div>
 </div>
-
-
+</body>
+</html>

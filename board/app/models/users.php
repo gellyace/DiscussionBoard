@@ -32,6 +32,7 @@ class Users extends AppModel
             'length' => array('validate_between', self::MIN_PASSWORD_LENGTH, self::MAX_DETAILS_LENGTH),
         )
     );
+
     
     // Encrypts the submitted password of the user using the Blowfish Algorithm
     public function generateHash($password)
@@ -89,7 +90,7 @@ class Users extends AppModel
         
         $db = DB::conn();
 
-        $user_account = $db->row('SELECT id, username, password FROM user WHERE username = ?', array($username));
+        $user_account = $db->row('SELECT id, username, password FROM user WHERE BINARY username = ?', array($username));
         $hashedPassword = self::getHashedPassword($username);
 
         if (!$user_account OR !self::verifyPassword($password, $hashedPassword)) {
@@ -190,26 +191,44 @@ class Users extends AppModel
 
     public function edit()
     {
-        if (!$this->validate()) {
-            throw new ValidationException('Update not valid');
+        $hashedPassword = self::getHashedPassword(get_session_username());
+
+        $change_password = !empty($this->current_password) || !empty($this->new_password);
+        
+        if(empty($this->new_password)){
+            if(self::verifyPassword($this->current_password, $this->password)){
+                unset ($this->validation_errors['username']);
+                unset ($this->validation_errors['password']);
+                unset ($this->validation_errors['email']);               
+            } else {
+                echo "Password does not match";
+                throw new ValidationException('Update not valid.');   
+            }
+        } else {
+            if(self::verifyPassword($this->current_password, $this->password)){
+                $this->password = self::generateHash($this->new_password);
+                unset ($this->validation_errors['username']);
+                unset ($this->validation_errors['email']);               
+            } else {
+                echo "Password does not match";
+                throw new ValidationException('Update not valid.');   
+            }
         }
 
-        $hashedPassword = self::generateHash($this->password); //encrypts password before storing it
+        if($this->hasError()){
+            throw new ValidationException();       
+        }
+     
         $id = get_session_id();
         $db = DB::conn();
         $db->begin();
 
         $params = array(
-            'username' => $this->username,
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
-            'email' => $this->email,
-            'password' => $hashedPassword,
+            'password' => $this->password,
         );
-        $where_params = array('id' => get_session_id());
-
-
-        //$db->query("UPDATE user SET username = ?, firstname = ?, lastname = ?, email = ?, password = ? WHERE id = ?", array($this->username, $this->firstname, $this->lastname, $this->email, $hashedpassword, $id));
+        $where_params = array('id' => $id);
 
         $db->update(self::USERS_TABLE, $params,$where_params);
         $db->commit();
@@ -218,7 +237,7 @@ class Users extends AppModel
     public function deactivate()
     {
         if (!$this->validate()) {
-            throw new ValidationException('Update not valid');
+            throw new ValidationException('Deactivate not valid');
         }
 
         $id = get_session_id();
