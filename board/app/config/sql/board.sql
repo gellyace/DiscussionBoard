@@ -33,7 +33,7 @@ category                VARCHAR(50) NOT NULL,
 date_created            TIMESTAMP,
 date_modified           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (id),
-INDEX (user_id, title, category, created),
+INDEX (user_id, title, category, date_created),
 FOREIGN KEY (user_id) REFERENCES user(id)
 )ENGINE=InnoDB;
                     
@@ -45,7 +45,7 @@ body                    TEXT NOT NULL,
 date_created            TIMESTAMP,
 date_modified           TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (id),
-INDEX (thread_id, user_id, created), 
+INDEX (thread_id, user_id, date_created), 
 FOREIGN KEY (thread_id) REFERENCES thread(id),
 FOREIGN KEY (user_id) REFERENCES user(id)
 )ENGINE=InnoDB;
@@ -54,9 +54,11 @@ CREATE TABLE IF NOT EXISTS liked (
 id                      INT UNSIGNED NOT NULL AUTO_INCREMENT,
 user_id                 INT UNSIGNED NOT NULL,
 comment_id              INT UNSIGNED NOT NULL,
+thread_id              INT UNSIGNED NOT NULL,
 PRIMARY KEY (id),
-INDEX (user_id, comment_id),
+INDEX (user_id, comment_id, thread_id),
 FOREIGN KEY (user_id) REFERENCES user(id),
-FOREIGN KEY (comment_id) REFERENCES comment(id)
+FOREIGN KEY (comment_id) REFERENCES comment(id),
+FOREIGN KEY (thread_id) REFERENCES thread(id)
 )ENGINE=InnoDB;
 
