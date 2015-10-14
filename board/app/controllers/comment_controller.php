@@ -64,18 +64,16 @@ class CommentController extends AppController
     {
         check_user_session(get_session_username());
         $user_id = get_session_id();
+
         $comment_id = Param::get('id');
-        $thread_id = Param::get('thread_id');
-
         $params_comment = array('body' => Param::get('body'));
-        $params_thread = array('title' => Param::get('title'));
-
         $comment = new Comment($params_comment);
         $comment_edit = Comment::getById($comment_id);
 
+        $thread_id = Param::get('thread_id');
+        $params_thread = array('title' => Param::get('title'));
         $thread = new Thread($params_thread);
         $thread_edit = Thread::getById($thread_id);
-
 
         $page = Param::get('page_next', self::EDIT_COMMENT);
 
@@ -127,6 +125,7 @@ class CommentController extends AppController
                 throw new NotFoundException("{$page} is not found");                    
                 break;
         }
+        
         $this->set(get_defined_vars());
         $this->render($page);
     }

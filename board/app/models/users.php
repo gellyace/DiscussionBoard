@@ -66,8 +66,7 @@ class Users extends AppModel
         $hashedPassword = self::generateHash($this->password); //encrypts password before storing it
 
         $db = DB::conn();
-        $db->begin();
-
+        
         $params = array(
             'username' => $this->username,
             'firstname' => $this->firstname,
@@ -77,7 +76,6 @@ class Users extends AppModel
         );
 
         $db->insert(self::USERS_TABLE, $params);
-        $db->commit();
     }
 
     public function login(Users $user) 
@@ -141,9 +139,7 @@ class Users extends AppModel
     public static function viewProfile($user_id)
     {
         $users = array();
-        $session_id = get_session_id();
-
-
+        
         $db = DB::conn();
         $rows = $db->rows('SELECT * FROM user WHERE id = ?', array($user_id));
 
@@ -156,7 +152,6 @@ class Users extends AppModel
     public static function viewThreads($user_id)
     {
         $user_threads = array();
-        $session_id = get_session_id();
 
         $db = DB::conn();
         $rows = $db->rows('SELECT * FROM thread WHERE user_id = ?', array($user_id));
@@ -190,11 +185,7 @@ class Users extends AppModel
     }
 
     public function edit()
-    {
-        $hashedPassword = self::getHashedPassword(get_session_username());
-
-        $change_password = !empty($this->current_password) || !empty($this->new_password);
-        
+    {        
         if(empty($this->new_password)){
             if(self::verifyPassword($this->current_password, $this->password)){
                 unset ($this->validation_errors['username']);
@@ -221,7 +212,6 @@ class Users extends AppModel
      
         $id = get_session_id();
         $db = DB::conn();
-        $db->begin();
 
         $params = array(
             'firstname' => $this->firstname,
@@ -231,7 +221,6 @@ class Users extends AppModel
         $where_params = array('id' => $id);
 
         $db->update(self::USERS_TABLE, $params,$where_params);
-        $db->commit();
     }
 
     public function deactivate()

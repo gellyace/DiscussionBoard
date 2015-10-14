@@ -66,7 +66,6 @@ class Comment extends AppModel
         );
 
         $db->insert(self::COMMENT_TABLE, $params);
-        $db->commit();
     }
 
     public static function getById($comment_id)
@@ -83,20 +82,13 @@ class Comment extends AppModel
     public function edit()
     {
         $this->validate();
-        if(!$this->validate()){
+        if($this->hasError()){
             throw new ValidationException("Invalid Comment");
         }
                     
         $db = DB::conn();
-        $db->begin();
-        
-        $params = array('body' => $this->body);
-        $where_params = array('id' => $this->id);
 
-         $db->query("UPDATE comment SET body = ?, date_modified = NOW() WHERE id = ?", array($this->body, $this->id));
-        //$db->update(self::COMMENT_TABLE, $params, $where_params);
-      
-        $db->commit();
+        $db->query("UPDATE comment SET body = ?, date_modified = NOW() WHERE id = ?", array($this->body, $this->id));
     }
 
     public function delete($id)

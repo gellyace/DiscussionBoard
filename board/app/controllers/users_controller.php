@@ -35,15 +35,15 @@ class UsersController extends AppController
                 throw new RecordNotFoundException("{$page} is not found");
                 break;
         }
-            $this->set(get_defined_vars());
-            $this->render($page);
+
+        $this->set(get_defined_vars());
+        $this->render($page);
     }
 
     public function register() 
     {
         $user = new Users();
         $page = Param::get('page_next', self::REGISTER_USER);
-        
         
         switch ($page) {
             case self::REGISTER_USER:
@@ -57,7 +57,7 @@ class UsersController extends AppController
                 $user->password = Param::get('password');
                 try {
                     $user_account = $user->register($user);
-                    //set_session($user_account->username, $user_account->id);
+                    set_session($user_account->username, $user_account->id);
                 } catch (ValidationException $e) {
                     $page=self::REGISTER_USER;
                 }
@@ -67,8 +67,9 @@ class UsersController extends AppController
                 throw new RecordNotFoundException("{$page} is not found");                    
                 break;
         }
-            $this->set(get_defined_vars());
-            $this->render($page);
+
+        $this->set(get_defined_vars());
+        $this->render($page);
     }
 
     public function logout()
@@ -87,6 +88,7 @@ class UsersController extends AppController
         $page = Param::get('page_next', self::VIEW_OWN);
         $users = Users::viewProfile($user_id);
         $usersThread = Users::viewThreads($user_id);
+
         switch ($page) {
             case self::VIEW_OWN:
                 $user->id = Param::get('user_id');
@@ -102,6 +104,7 @@ class UsersController extends AppController
                 throw new NotFoundException("{$page} is not found");                    
                 break;
         }
+
         $this->set(get_defined_vars());
         $this->render($page);
     }
@@ -136,32 +139,34 @@ class UsersController extends AppController
                 throw new RecordNotFoundException("{$page} is not found");                    
                 break;
         }
-            $this->set(get_defined_vars());
-            $this->render($page);
+
+        $this->set(get_defined_vars());
+        $this->render($page);
     }
 
     public function deactivate()
-      {
-            check_user_session(get_session_username());
-            $user = new Users();
-            $user_id = Param::get('id');
-            $page = Param::get('page_next', self::DEACTIVATE_USER);
+    {
+        check_user_session(get_session_username());
+        $user = new Users();
+        $user_id = Param::get('id');
+        $page = Param::get('page_next', self::DEACTIVATE_USER);
 
-            switch ($page) {
-                case self::DEACTIVATE_USER:
-                    $user->id = $user_id;
-                    try {
-                        $user->deactivate();
-                    } catch (ValidationException $e) {
-                        $page = self::DEACTIVATE_USER;
-                    }
-                    break;
+        switch ($page) {
+            case self::DEACTIVATE_USER:
+                $user->id = $user_id;
+                try {
+                    $user->deactivate();
+                } catch (ValidationException $e) {
+                    $page = self::DEACTIVATE_USER;
+                }
+                break;
 
-                default:
-                    throw new NotFoundException("{$page} is not found");                    
-                    break;
-            }
-            $this->set(get_defined_vars());
-            $this->render($page);
-      }  
+            default:
+                throw new NotFoundException("{$page} is not found");                    
+                break;
+        }
+
+        $this->set(get_defined_vars());
+        $this->render($page);
+    }  
 }

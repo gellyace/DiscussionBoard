@@ -5,6 +5,7 @@ class Thread extends AppModel
     const MAX_TITLE_LENGTH = 30;
     
     const THREAD_TABLE = 'thread';
+    const INACTIVE = 'Inactive';
 
     public $validation = array(
         'title'=> array(
@@ -56,7 +57,6 @@ class Thread extends AppModel
         }
                     
         $db = DB::conn();
-        $db->begin();
         
         $params = array(
             'title' => $this->title,
@@ -69,7 +69,6 @@ class Thread extends AppModel
         $this->id = $db->lastInsertId(); 
 
         $comment->write($this->id);
-        $db->commit();
     }
 
     public function edit()
@@ -81,18 +80,8 @@ class Thread extends AppModel
         }
                     
         $db = DB::conn();
-        $db->begin();
         
-        $params = array(
-            'title' => $this->title,
-            'category' => $this->category
-        );
-        $where_params = array('id' => $this->id);
-
         $db->query("UPDATE thread SET title = ?, category = ?, date_modified = NOW() WHERE id = ?", array($this->title, $this->category, $this->id));
-        //$db->update(self::THREAD_TABLE, $params, $where_params);
-      
-        $db->commit();
     }
 
     public static function getById($thread_id)
@@ -142,8 +131,7 @@ class Thread extends AppModel
     {
         $users = array();
         $db = DB::conn();
-        $db->begin();
-        
+       
         $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? AND id != ?", array("%{$keyword}%", self::getInactiveUserId()));
         
         foreach ($rows as $row) {
@@ -156,7 +144,6 @@ class Thread extends AppModel
     {
         $threads = array();
         $db = DB::conn();
-        $db->begin();
         
         $rows = $db->rows("SELECT * FROM thread WHERE (title LIKE ? AND user_id != ? )OR (category LIKE ? AND user_id != ?)", array("%{$keyword}%", self::getInactiveUserId(), "%{$keyword}%", self::getInactiveUserId()));
         
@@ -170,7 +157,6 @@ class Thread extends AppModel
     {
         $comments = array();
         $db = DB::conn();
-        $db->begin();
         
         $rows = $db->rows("SELECT * FROM comment WHERE body LIKE ? AND user_id != ?", array("%{$keyword}%", self::getInactiveUserId()));
         
@@ -183,7 +169,7 @@ class Thread extends AppModel
     public static function getInactiveUserId()
     {
         $db = DB::conn();
-        $row = $db->row('SELECT id FROM user WHERE status = ?', array('Inactive'));
+        $row = $db->row('SELECT id FROM user WHERE status = ?', array(self::INACTIVE));
         return $row['id'];
     }
 
@@ -191,13 +177,12 @@ class Thread extends AppModel
     {
         $users = array();
         $db = DB::conn();
-        $rows = $db->rows("SELECT id FROM user WHERE status = 'Inactive'");
-
+        $rows = $db->rows("SELECT id FROM user WHERE status = ?", array(self::INACTIVE));
+       
         foreach ($rows as $row) {
             $users[] = $row['id'];
         }
 
         return $users;
     }
-
 }

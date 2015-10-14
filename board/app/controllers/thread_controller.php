@@ -47,7 +47,7 @@ class ThreadController extends AppController
                 $thread->title = Param::get('title');
                 $comment->body = Param::get('body'); 
                 $thread->category = Param::get('category');
-                $thread->user_id = get_session_id();
+                $thread->user_id = $user_id;
                 try {
                     $thread->create($comment);
                 } catch (ValidationException $e) {
@@ -66,12 +66,12 @@ class ThreadController extends AppController
     public function edit()
     {
         check_user_session(get_session_username());
-        $user_id = get_session_id();
         $thread_id = Param::get('thread_id');
 
         $params = array(
             'title' => Param::get('title'),
             'category' => Param::get('category'),
+            'id' => $thread_id,
         );
 
         $thread = new Thread($params);
@@ -84,9 +84,6 @@ class ThreadController extends AppController
                 break;
                 
             case self::EDIT_END_THREAD:
-                $thread->title = Param::get('title');
-                $thread->category = Param::get('category');
-                $thread->id = $thread_id;
                 try {
                     $thread->edit();
                 } catch (ValidationException $e) {
@@ -133,9 +130,9 @@ class ThreadController extends AppController
         check_user_session(get_session_username());
         
         $keyword = Param::get('keyword');
-        $searchProfile=Thread::searchProfile($keyword);
-        $searchThread=Thread::searchThread($keyword);
-        $searchComment=Thread::searchComment($keyword);
+        $searchProfile = Thread::searchProfile($keyword);
+        $searchThread = Thread::searchThread($keyword);
+        $searchComment = Thread::searchComment($keyword);
         $page = Param::get('page_next', self::SEARCH);
 
         switch ($page) {
@@ -145,7 +142,7 @@ class ThreadController extends AppController
             case self::SEARCH_END:
                 $keyword = Param::get('keyword');
                 try {
-                    $searchProfile=Thread::searchProfile($keyword);
+                    $searchProfile = Thread::searchProfile($keyword);
                 } catch (ValidationException $e) {
                     $page = self::SEARCH;
                 }
