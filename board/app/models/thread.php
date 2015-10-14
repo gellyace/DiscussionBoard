@@ -119,7 +119,7 @@ class Thread extends AppModel
         
         foreach ($mostComments as $row) {
             $rows = $db->row("SELECT * FROM thread WHERE id=?", array($row['thread_id']));
-            $rows['count'] = $row['COUNT(*)'];
+            $rows['count'] = $row['comment_count'];
             $rows['date_created'] = $rows['date_created'];
             $rows['category'] = $rows['category'];
             $threads[] = new self($rows);
