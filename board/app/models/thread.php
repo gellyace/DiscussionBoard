@@ -17,7 +17,7 @@ class Thread extends AppModel
     {
         $threads = array();
         $db = DB::conn();
-        $user = implode(',',array_values(self::getAllInactive())); // added
+        $user = implode(',',array_values(self::getAllInactiveUser())); // added
 
         $rows = $db->rows( sprintf("SELECT * FROM thread WHERE user_id not in (?) LIMIT %d, %d", 
             $offset, $limit), array($user));
@@ -31,7 +31,7 @@ class Thread extends AppModel
     public static function countAll()
     {
         $db = DB::conn();
-        $user = implode(',',array_values(self::getAllInactive())); // added
+        $user = implode(',',array_values(self::getAllInactiveUser())); // added
         return $db->value('SELECT COUNT(*) FROM thread WHERE user_id not in (?)', array($user));
     }
 
@@ -115,7 +115,7 @@ class Thread extends AppModel
         $threads = array();
         $db = DB::conn();
         $mostComments = Comment::sortComments();
-        $user = implode(',',array_values(self::getAllInactive())); // added
+        $user = implode(',',array_values(self::getAllInactiveUser())); // added
         
         foreach ($mostComments as $row) {
             $rows = $db->row("SELECT * FROM thread WHERE id=?", array($row['thread_id']));
@@ -132,7 +132,7 @@ class Thread extends AppModel
         $users = array();
         $db = DB::conn();
        
-        $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? AND id != ?", array("%{$keyword}%", self::getInactiveUserId()));
+        $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? AND id not in (?)", array("%{$keyword}%", self::getAllInactiveUser()));
         
         foreach ($rows as $row) {
             $users[] = new self($row);
@@ -145,7 +145,7 @@ class Thread extends AppModel
         $threads = array();
         $db = DB::conn();
         
-        $rows = $db->rows("SELECT * FROM thread WHERE (title LIKE ? AND user_id != ? )OR (category LIKE ? AND user_id != ?)", array("%{$keyword}%", self::getInactiveUserId(), "%{$keyword}%", self::getInactiveUserId()));
+        $rows = $db->rows("SELECT * FROM thread WHERE (title LIKE ? AND user_id not in (?) )OR (category LIKE ? AND user_id not in (?))", array("%{$keyword}%", self::getAllInactiveUser(), "%{$keyword}%", self::getAllInactiveUser()));
         
         foreach ($rows as $row) {
             $threads[] = new self($row);
@@ -158,7 +158,7 @@ class Thread extends AppModel
         $comments = array();
         $db = DB::conn();
         
-        $rows = $db->rows("SELECT * FROM comment WHERE body LIKE ? AND user_id != ?", array("%{$keyword}%", self::getInactiveUserId()));
+        $rows = $db->rows("SELECT * FROM comment WHERE body LIKE ? AND user_id not in (?)", array("%{$keyword}%", self::getAllInactiveUser()));
         
         foreach ($rows as $row) {
             $comments[] = new self($row);
@@ -166,14 +166,7 @@ class Thread extends AppModel
         return $comments;  
     }
 
-    public static function getInactiveUserId()
-    {
-        $db = DB::conn();
-        $row = $db->row('SELECT id FROM user WHERE status = ?', array(self::INACTIVE));
-        return $row['id'];
-    }
-
-    public static function getAllInactive()
+    public static function getAllInactiveUser()
     {
         $users = array();
         $db = DB::conn();

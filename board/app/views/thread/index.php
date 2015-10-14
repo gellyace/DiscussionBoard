@@ -27,7 +27,7 @@
             <ul>
             <!-- list of all threads -->
                 <?php foreach ($threads as $v): ?>
-                <?php if (!in_array(($v->user_id),Thread::getAllInactive())) : ?> <!-- added-->
+                <?php if (!in_array(($v->user_id),Thread::getAllInactiveUser())) : ?> <!-- added-->
                 <li>
                     <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
                     <?php char_to_html($v->title) ?> ----> Category: <?php char_to_html($v->category) ?></a>  

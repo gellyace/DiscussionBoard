@@ -118,22 +118,7 @@ class Users extends AppModel
     public static function getUsernameById($id)
     {
         $db = DB::conn();
-        $row = $db->row('SELECT username FROM user WHERE id = ?', array($id));
-        return $row['username'];
-    }
-
-    public static function getEmailById($id)
-    {
-        $db = DB::conn();
-        $row = $db->row('SELECT email FROM user WHERE id = ?', array($id));
-        return $row['email'];
-    }
-
-    public static function getIdByUsername($username)
-    {
-        $db = DB::conn();
-        $row = $db->row('SELECT id FROM user WHERE username = ?', array($username));
-        return $row['id'];
+        return $db->value('SELECT username FROM user WHERE id = ?', array($id));
     }
 
     public static function viewProfile($user_id)
