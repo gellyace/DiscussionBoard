@@ -170,6 +170,7 @@ class Thread extends AppModel
     {
         $users = array();
         $db = DB::conn();
+        
         $rows = $db->rows("SELECT id FROM user WHERE status = ?", array(self::INACTIVE));
        
         foreach ($rows as $row) {
@@ -177,5 +178,8 @@ class Thread extends AppModel
         }
 
         return $users;
+        
+
+        //return $db->columns("SELECT id FROM user WHERE status = ?", array(self::INACTIVE));
     }
 }

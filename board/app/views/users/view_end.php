@@ -7,7 +7,7 @@
 <hr>
 <!-- user details -->
 <?php foreach ($users as $v): ?>
-    <ul>
+    <ul class="text_info">
     	<li> Username: <?php char_to_html($v->username) ?> </li>
             <ul>
                 <li>Firstname: <?php char_to_html($v->firstname) ?> </li>
@@ -20,7 +20,7 @@
 <!-- user threads -->
 <h4>Threads</h4>
 <?php foreach ($usersThread as $v): ?>
-    <ul>
+    <ul class="text_info">
      	<li> Title: <?php char_to_html($v->title) ?> </li>
             <ul>
                 <li>Category: <?php char_to_html($v->category) ?> </li>

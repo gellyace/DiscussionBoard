@@ -16,7 +16,7 @@
 <?php foreach($comments as $k=>$v): ?>
     <div class ="comment">
     <?php if (!in_array(($v->user_id),Thread::getAllInactiveUser())) : ?> <!-- added-->
-        <div class="meta">
+        <div class="meta" id="comment_info">
             <!-- Dsiplay Date Created and Modified -->
             <?php if((($v->date_created) == ($v->date_modified)) || (($v->date_modified) == null) || (($v->date_modified) == (0)) ): ?>
                 <?php char_to_html($k + 1) ?>: 

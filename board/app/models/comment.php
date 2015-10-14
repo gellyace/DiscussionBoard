@@ -48,7 +48,8 @@ class Comment extends AppModel
     public static function countAllLikes($comment_id)
     {
         $db = DB::conn();
-        return $db->value('SELECT COUNT(*) FROM liked WHERE comment_id = ?', array($comment_id));
+        $user = implode(',',array_values(Thread::getAllInactiveUser())); // added
+        return $db->value('SELECT COUNT(*) FROM liked WHERE comment_id = ? and user_id not in (?)', array($comment_id,$user));
     }
      
     public function write($thread_id)
