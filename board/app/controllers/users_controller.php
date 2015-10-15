@@ -14,7 +14,11 @@ class UsersController extends AppController
     public function login() 
     {   
         $user = new Users();
-        $page = Param::get('page_next', self::LOGIN_USER);      
+        $page = Param::get('page_next', self::LOGIN_USER);
+
+        if(isset($_SESSION['username'])){
+            redirect(url('thread/index'));
+        }      
 
         switch ($page){
             case self::LOGIN_USER:
@@ -44,6 +48,10 @@ class UsersController extends AppController
     {
         $user = new Users();
         $page = Param::get('page_next', self::REGISTER_USER);
+        
+        if(isset($_SESSION['username'])){
+            redirect(url('thread/index'));
+        }
         
         switch ($page) {
             case self::REGISTER_USER:
