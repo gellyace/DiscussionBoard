@@ -1,15 +1,15 @@
 <h2> <?php char_to_html($thread->title) ?> </h2>
 <!-- Validation Errors Block-->
 <?php if ($comment->hasError()): ?>
-    <div class="alert alert-block">   
+    <div class="alert alert-danger alert-block fade in alert-dismissable" style="width: 530px">
         <h4 class="alert-heading">Validation error!</h4>
-        <?php if (!empty($comment->validation_errors['body']['length'])): ?>                
-            <div><em>Comment</em> must be between 
-                <?php char_to_html($comment->validation['body']['length'][1]) ?>  and                    
-                <?php char_to_html($comment->validation['body']['length'][2]) ?> characters in length.
-            </div>            
-        <?php endif ?>
-    </div>                    
+            <?php if (!empty($comment->validation_errors['body']['length'])): ?>                
+                <div><em>Comment</em> must be between 
+                    <?php char_to_html($comment->validation['body']['length'][1]) ?>  and                    
+                    <?php char_to_html($comment->validation['body']['length'][2]) ?> characters in length.
+                </div>            
+            <?php endif ?>
+    </div> 
 <?php endif ?>
 <!-- Form Block -->
 <form class="well" method="post" action="<?php char_to_html(url('comment/write')) ?>">

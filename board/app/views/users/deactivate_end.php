@@ -4,5 +4,5 @@
     If you wish to REACTIVATE your account, just enter your old credentials. 
 </p>
 <div class="text-center">
-	<a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/login')) ?>"> Back to Login Page </a>
+    <a class="btn btn-large btn-primary" href="<?php char_to_html(url('users/login')) ?>"> Back to Login Page </a>
 </div>

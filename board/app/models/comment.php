@@ -41,8 +41,8 @@ class Comment extends AppModel
     {
         $db = DB::conn();
         $user = implode(',',array_values(Thread::getAllInactiveUser())); // added
-        return $db->rows('SELECT COUNT(*) as comment_count, thread_id FROM comment WHERE user_id not in (?)
-                            GROUP BY thread_id ORDER BY comment_count DESC, date_created DESC LIMIT 10', array($user)); //edited
+        return $db->rows('SELECT COUNT(*) as comment_count, thread_id, user_id FROM comment WHERE user_id not in (?)
+                            GROUP BY thread_id ORDER BY comment_count DESC, date_created DESC', array($user)); //edited
     }
 
     public static function countAllLikes($comment_id)

@@ -104,7 +104,8 @@ class Thread extends AppModel
         foreach ($rows as $row) {
             Likes::deleteByCommentId($row['id']);
         }
-        
+
+        $db->query("DELETE FROM liked WHERE thread_id = ?", array($id));
         $db->query("DELETE FROM comment WHERE thread_id = ?", array($id));        
         $db->query("DELETE FROM thread WHERE id = ?", array($id));
         $db->commit();
@@ -124,6 +125,7 @@ class Thread extends AppModel
             $rows['category'] = $rows['category'];
             $threads[] = new self($rows);
         }
+
         return $threads;
     }
     

@@ -6,7 +6,7 @@
 <body class="thread_create">
 <!-- Validation Errors Block-->
 <?php if ($thread->hasError() || $comment->hasError()): ?>
-    <div class="alert alert-block">
+    <div class="alert alert-danger alert-block fade in alert-dismissable" style="width: 530px">
         <h4 class="alert-warning">Validation error!</h4>
             <?php if (!empty($thread->validation_errors['title']['length'])): ?>
                 <div><em>Title</em> must be between

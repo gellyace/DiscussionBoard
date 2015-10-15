@@ -3,7 +3,7 @@ function validate_between($check, $min, $max)
 {
     $check = trim($check);
     $n = mb_strlen($check);
-	return $min <= $n && $n <= $max;
+    return $min <= $n && $n <= $max;
 }
 
 function validate_name($name)
@@ -30,4 +30,3 @@ function email_exists($email)
 {
     return !Users::getEmail($email);
 }
- 

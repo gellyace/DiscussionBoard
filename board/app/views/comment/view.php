@@ -33,7 +33,7 @@
                 <a href="javascript:deleteComment(<?php echo ($v->id)?>)">Delete</a>
             <?php endif ?>
         </div>
-        <div><?php echo readable_text($v->body) ?></div>
+        <div id="comment_info"><?php echo readable_text($v->body) ?></div>
         <!-- Like and Unlike Comment -->
         <span class="label label-primary"><?php echo "Total Likes: ".(Comment::countAllLikes($v->id))?></span><br>
         <?php if($v->is_like): ?>

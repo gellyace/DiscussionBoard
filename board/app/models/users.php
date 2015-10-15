@@ -170,23 +170,30 @@ class Users extends AppModel
     }
 
     public function edit()
-    {        
+    {   
+        $this->validate();
+        unset ($this->validation_errors['password']);
+        unset ($this->validation_errors['username']);
+        unset ($this->validation_errors['email']);
+        
         if(empty($this->new_password)){
-            if(self::verifyPassword($this->current_password, $this->password)){
-                unset ($this->validation_errors['username']);
-                unset ($this->validation_errors['password']);
-                unset ($this->validation_errors['email']);               
-            } else {
-                echo "Password does not match";
+            if(!self::verifyPassword($this->current_password, $this->password)){                
+                print '<script type="text/javascript">';
+                    print 'window.onload = function(){';
+                        print 'alert("Password does not match")';
+                    print '};';
+                print '</script>';
                 throw new ValidationException('Update not valid.');   
             }
         } else {
             if(self::verifyPassword($this->current_password, $this->password)){
-                $this->password = self::generateHash($this->new_password);
-                unset ($this->validation_errors['username']);
-                unset ($this->validation_errors['email']);               
+                $this->password = self::generateHash($this->new_password);                
             } else {
-                echo "Password does not match";
+                print '<script type="text/javascript">';
+                    print 'window.onload = function(){';
+                        print 'alert("Old Password does not match")';
+                    print '};';
+                print '</script>';
                 throw new ValidationException('Update not valid.');   
             }
         }

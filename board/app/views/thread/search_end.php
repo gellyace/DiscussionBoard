@@ -4,7 +4,7 @@
 <!-- list of all search results -->
 <h4>Users</h4>
     <?php foreach (Thread::searchProfile($keyword) as $v): ?>
-        <ul>
+        <ul id="search_info">
         <li> <!-- user profile matches -->   
             Username: <?php char_to_html($v->username) ?>                        
         </li>
@@ -18,7 +18,7 @@
     <hr>
 <h4>Threads</h4>
     <?php foreach (Thread::searchThread($keyword) as $v): ?>
-        <ul>
+        <ul id="search_info">
         <li> <!-- thread matches -->
             Title: <?php char_to_html($v->title) ?>                        
         </li>
@@ -33,7 +33,7 @@
     <hr>
  <h4>Comments</h4>
     <?php foreach (Thread::searchComment($keyword) as $v): ?>
-        <ul>
+        <ul id="search_info">
         <li> <!-- comment matches -->
             Body:  <?php char_to_html($v->body) ?>                     
         </li>

@@ -2,8 +2,14 @@
 <html class="thread_index">
 <head>
     <title></title>
+    <script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        //$('li.trending').slice(0,10).show();
+        $('ul li.trending').hide().filter(':lt(10)').show();
+    });
+    </script>
 </head>
-<body class="thread_index">
+<body class="thread_index" >
 <div class="container">
     <div class="row">
         <!-- list of all trending threads by comment count-->
@@ -11,13 +17,15 @@
             <h5>Trending Threads:</h5>
             <ul>
             <?php foreach ($trending as $v): ?>
-                <li>
-                    <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
-                    <?php char_to_html($v->title) ?></a>
-                    <span class="label label-primary"><?php char_to_html($v->count)?></span>
-                    <?php char_to_html($v->category)?>   
-                </li>
-                <?php endforeach ?>
+                <?php if (!in_array(($v->user_id),Thread::getAllInactiveUser())) : ?> <!-- added-->
+                    <li class="trending">
+                        <a href="<?php char_to_html(url('comment/view', array('thread_id' => $v->id))) ?>">
+                        <?php char_to_html($v->title) ?></a>
+                        <span class="label label-primary"><?php char_to_html($v->count)?></span>
+                        <?php char_to_html($v->category)?>   
+                    </li>
+                <?php endif ?><!-- added-->
+            <?php endforeach ?>
             </ul>
         </div>
         <div class="col-sm-6" id="thread_info">
