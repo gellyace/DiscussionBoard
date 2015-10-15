@@ -33,7 +33,6 @@ class Users extends AppModel
         )
     );
 
-    
     // Encrypts the submitted password of the user using the Blowfish Algorithm
     public function generateHash($password)
     {
@@ -131,6 +130,7 @@ class Users extends AppModel
         foreach ($rows as $row) {
             $users[] = new self($row);
         }
+
         return $users; 
     }
 
@@ -144,6 +144,7 @@ class Users extends AppModel
         foreach ($rows as $row) {
             $user_threads[] = new self($row);
         }
+
         return $user_threads; 
     }
 
@@ -155,6 +156,7 @@ class Users extends AppModel
         if(!$row){
             throw new RecordNotFoundException('No Record Found');
         }
+
         return new self($row);
     }
 
@@ -166,6 +168,7 @@ class Users extends AppModel
         if(!$row){
             throw new RecordNotFoundException('No Record Found');
         }
+        
         return new self($row);
     }
 

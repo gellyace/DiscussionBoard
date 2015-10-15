@@ -2,7 +2,6 @@
 <html class="comment_view">
 <head>
     <title></title>
-    
 </head>
 <body class="comment_view">
 

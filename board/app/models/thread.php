@@ -45,8 +45,7 @@ class Thread extends AppModel
         }
         return new self($row);
     }
-
-                
+             
     public function create(Comment $comment)
     {
         $this->validate();
@@ -89,9 +88,10 @@ class Thread extends AppModel
         $db = DB::conn();
         $row = $db->row('SELECT * FROM thread WHERE id = ?', array($thread_id));
         
-        if(!$row){
+        if(!$row) {
             throw new RecordNotFoundException('No Record Found');
         }
+
         return new self($row);
     }
 
@@ -139,6 +139,7 @@ class Thread extends AppModel
         foreach ($rows as $row) {
             $users[] = new self($row);
         }
+
         return $users;  
     }
 
@@ -152,6 +153,7 @@ class Thread extends AppModel
         foreach ($rows as $row) {
             $threads[] = new self($row);
         }
+
         return $threads;  
     }
 
@@ -165,6 +167,7 @@ class Thread extends AppModel
         foreach ($rows as $row) {
             $comments[] = new self($row);
         }
+
         return $comments;  
     }
 
@@ -180,8 +183,6 @@ class Thread extends AppModel
         }
 
         return $users;
-        
-
         //return $db->columns("SELECT id FROM user WHERE status = ?", array(self::INACTIVE));
     }
 }

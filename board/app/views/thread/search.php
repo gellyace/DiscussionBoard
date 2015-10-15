@@ -9,7 +9,7 @@
 <div class="col-sm-3">
 <form role="form" name="search" action="<?php char_to_html(url('')) ?>" method="post">
     <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search" name="keyword" value="<?php char_to_html(Param::get('keyword')) ?>" onFocus="this.value=''"/>
+        <input type="text" class="form-control" placeholder="Search" name="keyword" required value="<?php char_to_html(Param::get('keyword')) ?>" onFocus="this.value=''"/>
     <div class="input-group-btn">
         <input type="hidden" name="page_next" value="search_end"/>
         <button type="submit" class="btn btn-primary">Submit</button> 
