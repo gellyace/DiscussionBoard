@@ -14,7 +14,7 @@
 <!-- Display All Comments inside this thread -->
 <?php foreach($comments as $k=>$v): ?>
     <div class ="comment">
-    <?php if (!in_array(($v->user_id),Thread::getAllInactiveUser())) : ?> <!-- added-->
+    <?php if (!in_array(($v->user_id),Thread::getAllInactiveUser())) : ?> 
         <div class="meta" id="comment_info">
             <!-- Dsiplay Date Created and Modified -->
             <?php if((($v->date_created) == ($v->date_modified)) || (($v->date_modified) == null) || (($v->date_modified) == (0)) ): ?>
