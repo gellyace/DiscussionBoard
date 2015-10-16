@@ -17,3 +17,8 @@ function redirect($url)
     header('Location: '.$url);
     exit(); 
 }
+
+function wrong_password()
+{
+	echo "<p align='right'><font color='white' size='4pt'><u> Password does not match. </u></font></p> ";
+}

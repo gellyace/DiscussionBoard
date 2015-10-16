@@ -180,25 +180,15 @@ class Users extends AppModel
         unset ($this->validation_errors['email']);
         
         if(empty($this->new_password)){
-            if(!self::verifyPassword($this->current_password, $this->password)){                
-                echo '<script type="text/javascript">';
-                    echo 'window.onload = function(){';
-                        echo 'alert("Password does not match")';
-                    echo '};';
-                echo '</script>';
-                echo "<p align='center'><font color='white' size='4pt'><u> Password does not match. </u></font></p> ";
+            if(!self::verifyPassword($this->current_password, $this->password)){
+                wrong_password();
                 throw new ValidationException('Update not valid.');   
             }
         } else {
             if(self::verifyPassword($this->current_password, $this->password)){
                 $this->password = self::generateHash($this->new_password);                
             } else {
-                echo '<script type="text/javascript">';
-                    echo 'window.onload = function(){';
-                        echo 'alert("Old Password does not match")';
-                    echo '};';
-                echo '</script>';
-                echo "<p align='center'><font color='white' size='4pt'> Password does not match. </font></p> ";
+                wrong_password();
                 throw new ValidationException('Update not valid.');   
             }
         }
