@@ -16,11 +16,10 @@ class Comment extends AppModel
     {
         $comments = array();
         $db = DB::conn();
-        $user = implode(',',array_values(Thread::getAllInactiveUser())); // added
+        $user = implode(',',array_values(Thread::getAllInactiveUser())); 
         $rows = $db->rows(
             sprintf("SELECT * FROM comment WHERE thread_id=? and user_id not in (?) LIMIT %d, %d", $offset, $limit),
-            array($thread_id, $user) // edited
-        );
+            array($thread_id, $user));
         
         foreach ($rows as $row) {
             $row['username'] = Users::getUsernameById($row['user_id']);
@@ -33,22 +32,22 @@ class Comment extends AppModel
     public static function countAll($thread_id)
     {
         $db = DB::conn();
-        $user = implode(',',array_values(Thread::getAllInactiveUser())); // added
+        $user = implode(',',array_values(Thread::getAllInactiveUser())); 
         return $db->value('SELECT COUNT(*) FROM comment WHERE thread_id = ? AND user_id not in (?)', array($thread_id, $user));
     }
 
     public static function sortComments()
     {
         $db = DB::conn();
-        $user = implode(',',array_values(Thread::getAllInactiveUser())); // added
+        $user = implode(',',array_values(Thread::getAllInactiveUser())); 
         return $db->rows('SELECT COUNT(*) as comment_count, thread_id, user_id FROM comment WHERE user_id not in (?)
-                            GROUP BY thread_id ORDER BY comment_count DESC, date_created DESC', array($user)); //edited
+                            GROUP BY thread_id ORDER BY comment_count DESC, date_created DESC', array($user)); 
     }
 
     public static function countAllLikes($comment_id)
     {
         $db = DB::conn();
-        $user = implode(',',array_values(Thread::getAllInactiveUser())); // added
+        $user = implode(',',array_values(Thread::getAllInactiveUser())); 
         return $db->value('SELECT COUNT(*) FROM liked WHERE comment_id = ? and user_id not in (?)', array($comment_id,$user));
     }
      
@@ -93,11 +92,16 @@ class Comment extends AppModel
     }
 
     public function delete($id)
-    {                    
-        $db = DB::conn();
-        $db->begin();
-        $db->query("DELETE FROM liked  WHERE comment_id = ?", array($id));
-        $db->query("DELETE FROM comment WHERE id = ?", array($id));
-        $db->commit();
+    {    
+        try {                
+            $db = DB::conn();
+            $db->begin();
+            $db->query("DELETE FROM liked  WHERE comment_id = ?", array($id));
+            $db->query("DELETE FROM comment WHERE id = ?", array($id));
+            $db->commit();
+
+        } catch (Exception $e) {
+            $db->rollback();
+        }
     }
 }

@@ -17,7 +17,7 @@ class Thread extends AppModel
     {
         $threads = array();
         $db = DB::conn();
-        $user = implode(',',array_values(self::getAllInactiveUser())); // added
+        $user = implode(',',array_values(self::getAllInactiveUser())); 
 
         $rows = $db->rows( sprintf("SELECT * FROM thread WHERE user_id not in (?) LIMIT %d, %d", 
             $offset, $limit), array($user));
@@ -31,7 +31,7 @@ class Thread extends AppModel
     public static function countAll()
     {
         $db = DB::conn();
-        $user = implode(',',array_values(self::getAllInactiveUser())); // added
+        $user = implode(',',array_values(self::getAllInactiveUser())); 
         return $db->value('SELECT COUNT(*) FROM thread WHERE user_id not in (?)', array($user));
     }
 
@@ -96,19 +96,24 @@ class Thread extends AppModel
     }
 
     public function delete($id)
-    {                    
-        $db = DB::conn();
-        $db->begin();
-        $rows = $db->rows('SELECT id FROM comment WHERE thread_id = ?', array($id));
+    {   
+        try {
+            $db = DB::conn();
+            $db->begin();
+            $rows = $db->rows('SELECT id FROM comment WHERE thread_id = ?', array($id));
 
-        foreach ($rows as $row) {
-            Likes::deleteByCommentId($row['id']);
-        }
+            foreach ($rows as $row) {
+                Likes::deleteByCommentId($row['id']);
+            }
 
-        $db->query("DELETE FROM liked WHERE thread_id = ?", array($id));
-        $db->query("DELETE FROM comment WHERE thread_id = ?", array($id));        
-        $db->query("DELETE FROM thread WHERE id = ?", array($id));
-        $db->commit();
+            $db->query("DELETE FROM liked WHERE thread_id = ?", array($id));
+            $db->query("DELETE FROM comment WHERE thread_id = ?", array($id));        
+            $db->query("DELETE FROM thread WHERE id = ?", array($id));
+            $db->commit(); 
+
+        } catch (Exception $e) {
+            $db->rollback();
+        }               
     }
 
     public static function trending()
@@ -116,7 +121,7 @@ class Thread extends AppModel
         $threads = array();
         $db = DB::conn();
         $mostComments = Comment::sortComments();
-        $user = implode(',',array_values(self::getAllInactiveUser())); // added
+        $user = implode(',',array_values(self::getAllInactiveUser())); 
         
         foreach ($mostComments as $row) {
             $rows = $db->row("SELECT * FROM thread WHERE id=?", array($row['thread_id']));
@@ -183,6 +188,5 @@ class Thread extends AppModel
         }
 
         return $users;
-        //return $db->columns("SELECT id FROM user WHERE status = ?", array(self::INACTIVE));
     }
 }
