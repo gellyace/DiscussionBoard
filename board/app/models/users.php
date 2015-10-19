@@ -250,4 +250,18 @@ class Users extends AppModel
                 self::reactivate();
         }
     }
+
+     public static function searchProfile($keyword)
+    {
+        $users = array();
+        $db = DB::conn();
+       
+        $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? AND id not in (?)", array("%{$keyword}%", Thread::getAllInactiveUser()));
+        
+        foreach ($rows as $row) {
+            $users[] = new self($row);
+        }
+
+        return $users;  
+    }
 }

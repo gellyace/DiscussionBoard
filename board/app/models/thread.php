@@ -134,20 +134,6 @@ class Thread extends AppModel
         return $threads;
     }
     
-    public static function searchProfile($keyword)
-    {
-        $users = array();
-        $db = DB::conn();
-       
-        $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? AND id not in (?)", array("%{$keyword}%", self::getAllInactiveUser()));
-        
-        foreach ($rows as $row) {
-            $users[] = new self($row);
-        }
-
-        return $users;  
-    }
-
     public static function searchThread($keyword)
     {
         $threads = array();
@@ -160,20 +146,6 @@ class Thread extends AppModel
         }
 
         return $threads;  
-    }
-
-    public static function searchComment($keyword)
-    {
-        $comments = array();
-        $db = DB::conn();
-        
-        $rows = $db->rows("SELECT * FROM comment WHERE body LIKE ? AND user_id not in (?)", array("%{$keyword}%", self::getAllInactiveUser()));
-        
-        foreach ($rows as $row) {
-            $comments[] = new self($row);
-        }
-
-        return $comments;  
     }
 
     public static function getAllInactiveUser()

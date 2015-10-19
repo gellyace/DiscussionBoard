@@ -130,9 +130,9 @@ class ThreadController extends AppController
         check_user_session(get_session_username());
         
         $keyword = Param::get('keyword');
-        $searchProfile = Thread::searchProfile($keyword);
+        $searchProfile = Users::searchProfile($keyword);
         $searchThread = Thread::searchThread($keyword);
-        $searchComment = Thread::searchComment($keyword);
+        $searchComment = Comment::searchComment($keyword);
         $page = Param::get('page_next', self::SEARCH);
 
         switch ($page) {
@@ -142,7 +142,6 @@ class ThreadController extends AppController
             case self::SEARCH_END:
                 $keyword = Param::get('keyword');
                 try {
-                    $searchProfile = Thread::searchProfile($keyword);
                 } catch (ValidationException $e) {
                     $page = self::SEARCH;
                 }

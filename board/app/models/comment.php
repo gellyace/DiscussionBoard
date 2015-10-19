@@ -110,4 +110,18 @@ class Comment extends AppModel
         $db = DB::conn();
         $db->query('DELETE FROM comment WHERE thread_id = ?', array($comment_id));
     }
+
+    public static function searchComment($keyword)
+    {
+        $comments = array();
+        $db = DB::conn();
+        
+        $rows = $db->rows("SELECT * FROM comment WHERE body LIKE ? AND user_id not in (?)", array("%{$keyword}%", Thread::getAllInactiveUser()));
+        
+        foreach ($rows as $row) {
+            $comments[] = new self($row);
+        }
+
+        return $comments;  
+    }
 }
