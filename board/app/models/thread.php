@@ -106,8 +106,8 @@ class Thread extends AppModel
                 Likes::deleteByCommentId($row['id']);
             }
 
-            $db->query("DELETE FROM liked WHERE thread_id = ?", array($id));
-            $db->query("DELETE FROM comment WHERE thread_id = ?", array($id));        
+            Likes::deleteByCommentId($id);
+            Comment::deleteByThreadId($id);        
             $db->query("DELETE FROM thread WHERE id = ?", array($id));
             $db->commit(); 
 

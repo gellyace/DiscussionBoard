@@ -96,12 +96,18 @@ class Comment extends AppModel
         try {                
             $db = DB::conn();
             $db->begin();
-            $db->query("DELETE FROM liked  WHERE comment_id = ?", array($id));
+            Likes::deleteByCommentId($id);
             $db->query("DELETE FROM comment WHERE id = ?", array($id));
             $db->commit();
 
         } catch (Exception $e) {
             $db->rollback();
         }
+    }
+
+    public static function deleteByThreadId($comment_id)
+    {
+        $db = DB::conn();
+        $db->query('DELETE FROM comment WHERE thread_id = ?', array($comment_id));
     }
 }
