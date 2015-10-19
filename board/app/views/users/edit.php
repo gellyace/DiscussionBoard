@@ -36,7 +36,7 @@
         function enable_text(status)
         {
             status=!status; 
-            document.login.passwordNew.disabled = status;
+            document.login.new_password.disabled = status;
         }
     </script>
 </head>
@@ -59,7 +59,7 @@
                     <input type="password" id="password" name="password" placeholder="Enter password" value="" required >
                 <hr>
                 <label class="form"><span class="glyphicon glyphicon-lock"></span>  New Password:</label><br>
-                    <input type="password" id="passwordNew" name="passwordNew" placeholder="Enter password" value="" 
+                    <input type="password" id="new_password" name="new_password" placeholder="Enter password" value="" 
                             pattern=".{6,30}" required title="New Password must be between 6 to 30 characters">
                     <input type="checkbox" name="others" onclick="enable_text(this.checked)"><span class="glyphicon glyphicon-pencil"></span>
                 <hr>

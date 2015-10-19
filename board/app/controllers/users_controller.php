@@ -133,7 +133,7 @@ class UsersController extends AppController
                 $user_edit->firstname = Param::get('firstname');
                 $user_edit->lastname = Param::get('lastname');
                 $user_edit->current_password = Param::get('password');
-                $user_edit->new_password = Param::get('passwordNew');
+                $user_edit->new_password = Param::get('new_password');
                 try {
                     $user_edit->edit();
                 } catch (ValidationException $e) {
