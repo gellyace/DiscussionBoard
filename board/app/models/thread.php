@@ -5,6 +5,7 @@ class Thread extends AppModel
     const MAX_TITLE_LENGTH = 30;
     
     const THREAD_TABLE = 'thread';
+    const INACTIVE = 'Inactive';
 
     public $validation = array(
         'title'=> array(
@@ -16,7 +17,10 @@ class Thread extends AppModel
     {
         $threads = array();
         $db = DB::conn();
-        $rows = $db->rows( sprintf("SELECT * FROM thread ORDER BY id LIMIT %d, %d", $offset, $limit));
+        $user = implode(',',array_values(self::getAllInactiveUser())); 
+
+        $rows = $db->rows( sprintf("SELECT * FROM thread WHERE user_id not in (?) LIMIT %d, %d", 
+            $offset, $limit), array($user));
 
         foreach ($rows as $row) {
             $threads[] = new self($row);
@@ -27,7 +31,8 @@ class Thread extends AppModel
     public static function countAll()
     {
         $db = DB::conn();
-        return $db->value('SELECT COUNT(*) FROM thread');
+        $user = implode(',',array_values(self::getAllInactiveUser())); 
+        return $db->value('SELECT COUNT(*) FROM thread WHERE user_id not in (?)', array($user));
     }
 
     public static function get($id)
@@ -40,8 +45,7 @@ class Thread extends AppModel
         }
         return new self($row);
     }
-
-                
+             
     public function create(Comment $comment)
     {
         $this->validate();
@@ -52,17 +56,109 @@ class Thread extends AppModel
         }
                     
         $db = DB::conn();
-        $db->begin();
         
         $params = array(
-            'title' => $this->title
+            'title' => $this->title,
+            'category' => $this->category,
+            'user_id' => $this->user_id,
         );
-
+        
         $db->insert(self::THREAD_TABLE, $params);
+
         $this->id = $db->lastInsertId(); 
 
-        // write first comment at the same time
         $comment->write($this->id);
-        $db->commit();
-    }        
+    }
+
+    public function edit()
+    {
+        $this->validate();
+        
+        if ($this->hasError()) {                    
+            throw new ValidationException('Ivalid thread');
+        }
+                    
+        $db = DB::conn();
+        
+        $db->query("UPDATE thread SET title = ?, category = ?, date_modified = NOW() WHERE id = ?", array($this->title, $this->category, $this->id));
+    }
+
+    public static function getById($thread_id)
+    {
+        $db = DB::conn();
+        $row = $db->row('SELECT * FROM thread WHERE id = ?', array($thread_id));
+        
+        if(!$row) {
+            throw new RecordNotFoundException('No Record Found');
+        }
+
+        return new self($row);
+    }
+
+    public function delete($id)
+    {   
+        try {
+            $db = DB::conn();
+            $db->begin();
+            $rows = $db->rows('SELECT id FROM comment WHERE thread_id = ?', array($id));
+
+            foreach ($rows as $row) {
+                Likes::deleteByCommentId($row['id']);
+            }
+
+            Likes::deleteByCommentId($id);
+            Comment::deleteByThreadId($id);        
+            $db->query("DELETE FROM thread WHERE id = ?", array($id));
+            $db->commit(); 
+
+        } catch (Exception $e) {
+            $db->rollback();
+        }               
+    }
+
+    public static function trending()
+    {
+        $threads = array();
+        $db = DB::conn();
+        $mostComments = Comment::sortComments();
+        $user = implode(',',array_values(self::getAllInactiveUser())); 
+        
+        foreach ($mostComments as $row) {
+            $rows = $db->row("SELECT * FROM thread WHERE id=?", array($row['thread_id']));
+            $rows['count'] = $row['comment_count'];
+            $rows['date_created'] = $rows['date_created'];
+            $rows['category'] = $rows['category'];
+            $threads[] = new self($rows);
+        }
+
+        return $threads;
+    }
+    
+    public static function searchThread($keyword)
+    {
+        $threads = array();
+        $db = DB::conn();
+        
+        $rows = $db->rows("SELECT * FROM thread WHERE (title LIKE ? AND user_id not in (?) )OR (category LIKE ? AND user_id not in (?))", array("%{$keyword}%", self::getAllInactiveUser(), "%{$keyword}%", self::getAllInactiveUser()));
+        
+        foreach ($rows as $row) {
+            $threads[] = new self($row);
+        }
+
+        return $threads;  
+    }
+
+    public static function getAllInactiveUser()
+    {
+        $users = array();
+        $db = DB::conn();
+        
+        $rows = $db->rows("SELECT id FROM user WHERE status = ?", array(self::INACTIVE));
+       
+        foreach ($rows as $row) {
+            $users[] = $row['id'];
+        }
+
+        return $users;
+    }
 }

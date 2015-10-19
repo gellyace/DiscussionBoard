@@ -3,12 +3,12 @@ function validate_between($check, $min, $max)
 {
     $check = trim($check);
     $n = mb_strlen($check);
-	return $min <= $n && $n <= $max;
+    return $min <= $n && $n <= $max;
 }
 
 function validate_name($name)
 {
-    return preg_match('/^[a-zA-Z ]*$/', $name);
+    return preg_match("/^[a-zA-Z]+(?:[\s][A-Za-z]+)*$/", $name); 
 }
 
 function validate_alphanumeric($check)
@@ -30,4 +30,3 @@ function email_exists($email)
 {
     return !Users::getEmail($email);
 }
- 

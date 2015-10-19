@@ -6,7 +6,7 @@ class Users extends AppModel
     const MIN_EMAIL_LENGTH = 11;
     const MAX_DETAILS_LENGTH = 30;
     
-    const USERS_TABLE = 'users';
+    const USERS_TABLE = 'user';
 
     public $user_validated = true;
     public $validation = array(
@@ -32,7 +32,7 @@ class Users extends AppModel
             'length' => array('validate_between', self::MIN_PASSWORD_LENGTH, self::MAX_DETAILS_LENGTH),
         )
     );
-    
+
     // Encrypts the submitted password of the user using the Blowfish Algorithm
     public function generateHash($password)
     {
@@ -52,7 +52,7 @@ class Users extends AppModel
     public function getHashedPassword($username)
     {
         $db = DB::conn();
-        $row = $db->row('SELECT password FROM users WHERE username = ?', array($username));
+        $row = $db->row('SELECT password FROM user WHERE username = ?', array($username));
         return $row['password'];
     }
     
@@ -65,8 +65,7 @@ class Users extends AppModel
         $hashedPassword = self::generateHash($this->password); //encrypts password before storing it
 
         $db = DB::conn();
-        $db->begin();
-
+        
         $params = array(
             'username' => $this->username,
             'firstname' => $this->firstname,
@@ -76,7 +75,6 @@ class Users extends AppModel
         );
 
         $db->insert(self::USERS_TABLE, $params);
-        $db->commit();
     }
 
     public function login(Users $user) 
@@ -89,20 +87,21 @@ class Users extends AppModel
         
         $db = DB::conn();
 
-        $user_account = $db->row('SELECT id, username, password FROM users WHERE username = ?', array($username));
+        $user_account = $db->row('SELECT id, username, password FROM user WHERE BINARY username = ?', array($username));
         $hashedPassword = self::getHashedPassword($username);
 
         if (!$user_account OR !self::verifyPassword($password, $hashedPassword)) {
             $this->user_validated = false;
             throw new RecordNotFoundException("Invalid Information");
         }
+       
         return new self($user_account);
     }
 
     public static function getUsername($username)
     {
         $db = DB::conn();
-        $row = $db->row('SELECT * FROM users WHERE username = ?', array($username));
+        $row = $db->row('SELECT * FROM user WHERE username = ?', array($username));
 
         return !$row ? false : new self($row);
     } 
@@ -110,8 +109,159 @@ class Users extends AppModel
     public static function getEmail($email)
     {
         $db = DB::conn();
-        $row = $db->row('SELECT * FROM users WHERE email = ?', array($email));
+        $row = $db->row('SELECT * FROM user WHERE email = ?', array($email));
 
         return !$row ? false : new self($row);
-    }  
+    }
+
+    public static function getUsernameById($id)
+    {
+        $db = DB::conn();
+        return $db->value('SELECT username FROM user WHERE id = ?', array($id));
+    }
+
+    public static function viewProfile($user_id)
+    {
+        $users = array();
+        
+        $db = DB::conn();
+        $rows = $db->rows('SELECT * FROM user WHERE id = ?', array($user_id));
+
+        foreach ($rows as $row) {
+            $users[] = new self($row);
+        }
+
+        return $users; 
+    }
+
+    public static function viewThreads($user_id)
+    {
+        $user_threads = array();
+
+        $db = DB::conn();
+        $rows = $db->rows('SELECT * FROM thread WHERE user_id = ?', array($user_id));
+
+        foreach ($rows as $row) {
+            $user_threads[] = new self($row);
+        }
+
+        return $user_threads; 
+    }
+
+    public static function getById($user_id)
+    {
+        $db = DB::conn();
+        $row = $db->row('SELECT * FROM user WHERE id = ?', array($user_id));
+        
+        if(!$row){
+            throw new RecordNotFoundException('No Record Found');
+        }
+
+        return new self($row);
+    }
+
+    public static function get($id)
+    {
+        $db = DB::conn();
+        $row = $db->row('SELECT * FROM user WHERE id = ?', array($id));
+
+        if(!$row){
+            throw new RecordNotFoundException('No Record Found');
+        }
+        
+        return new self($row);
+    }
+
+    public function edit()
+    {   
+        $this->validate();
+        unset ($this->validation_errors['password']);
+        unset ($this->validation_errors['username']);
+        unset ($this->validation_errors['email']);
+        
+        if(empty($this->new_password)){
+            if(!self::verifyPassword($this->current_password, $this->password)){
+                wrong_password();
+                throw new ValidationException('Update not valid.');   
+            }
+        } else {
+            if(self::verifyPassword($this->current_password, $this->password)){
+                $this->password = self::generateHash($this->new_password);                
+            } else {
+                wrong_password();
+                throw new ValidationException('Update not valid.');   
+            }
+        }
+
+        if($this->hasError()){
+            throw new ValidationException();       
+        }
+     
+        $id = get_session_id();
+        $db = DB::conn();
+
+        $params = array(
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'password' => $this->password,
+        );
+        $where_params = array('id' => $id);
+
+        $db->update(self::USERS_TABLE, $params,$where_params);
+    }
+
+    public function deactivate()
+    {
+        if (!$this->validate()) {
+            throw new ValidationException('Deactivate not valid');
+        }
+
+        $id = get_session_id();
+        $db = DB::conn();
+       
+        $params = array(
+            'status' => 'Inactive',
+        );
+        $where_params = array('id' => $id);
+
+        $db->update(self::USERS_TABLE, $params,$where_params);
+    }
+
+    public static function reactivate()
+    {
+        $id = get_session_id();
+        $db = DB::conn();
+       
+        $params = array(
+            'status' => 'Active',
+        );
+        $where_params = array('id' => $id);
+
+        $db->update(self::USERS_TABLE, $params,$where_params);
+    }
+
+    public static function checkStatus()
+    {
+        $db = DB::conn();
+        $username = get_session_username();
+        $user_status = $db->row('SELECT status FROM user WHERE username = ?', array($username));
+
+        if ($user_status['status'] == 'Inactive'){
+                self::reactivate();
+        }
+    }
+
+     public static function searchProfile($keyword)
+    {
+        $users = array();
+        $db = DB::conn();
+       
+        $rows = $db->rows("SELECT * FROM user WHERE username LIKE ? AND id not in (?)", array("%{$keyword}%", Thread::getAllInactiveUser()));
+        
+        foreach ($rows as $row) {
+            $users[] = new self($row);
+        }
+
+        return $users;  
+    }
 }

@@ -16,21 +16,21 @@
 </div>
 <?php endif ?>
 <!-- Form Block -->
-<div class="row">
-    <div class="col-md-3 col-md-offset-4">
+<div class="row" id="login_screen">
+    <div class="col-md-3 col-md-offset-4" id="login">
         <div class="form-group">
             <fieldset>
             <legend class="form_legend">Welcome Guest</legend>
-            <form class="span5 well" role="form" action="<?php char_to_html(url('')) ?>" method="post">
-                <label class="form"><span class="glyphicon glyphicon-user"></span>  Username:</label>
-                    <input type="text" class="input" name="username" placeholder="Enter username" value="<?php char_to_html(Param::get('username')) ?>" required>
+            <form class="span5 well" id="well" role="form" action="<?php char_to_html(url('')) ?>" method="post">
+                <label class="form" id="login_text"><span class="glyphicon glyphicon-user"></span>  Username:</label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter username" value="<?php char_to_html(Param::get('username')) ?>" required>
                 <hr>
-                <label class="form"><span class="glyphicon glyphicon-lock"></span>  Password:</label>
-                    <input type="password" name="password" placeholder="Enter password" value="<?php char_to_html(Param::get('password')) ?>" required>
+                <label class="form" id="login_text"><span class="glyphicon glyphicon-lock"></span>  Password:</label>
+                    <input type="password" class="form-control" name="password" placeholder="Enter password" value="<?php char_to_html(Param::get('password')) ?>" required>
                 <hr>
                 <div class="col-sm-offset-5">
                     <input type="hidden" name="page_next" value="login_end">
-                    <button type="submit" class="btn">Login</button>
+                    <button type="submit" class="btn">LOGIN</button>
                 </div>
                 <br>
                 <div class="col-sm-offset-1">
@@ -43,3 +43,4 @@
 </div>
 </body>
 </html>
+

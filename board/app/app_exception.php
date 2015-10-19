@@ -14,3 +14,7 @@ class RecordNotFoundException extends AppException
 class PageNotFoundException extends AppException
 {
 }
+
+class DuplicateValueException extends AppException
+{
+}

@@ -62,26 +62,26 @@
 <? endif ?> 
 
 <!-- Form Block -->
-<div class="row">
-    <div class="col-md-3 col-md-offset-4">
+<div class="row" id="login_screen">
+    <div class="col-md-3 col-md-offset-4" id="login">
         <div class="form-group">
             <fieldset>
             <legend class="form_legend">Register</legend>
-            <form class="well span4" role="form" name="login" action="<?php char_to_html(url('')) ?>" method="post">
-                <label class="form"><span class="glyphicon glyphicon-user"></span>  First Name:</label><br>
-                    <input type="text" name="firstname" placeholder="Enter firstname" value="<?php char_to_html(Param::get('firstname')) ?>" required>
+            <form class="well span4" id="well" role="form" name="login" action="<?php char_to_html(url('')) ?>" method="post">
+                <label class="form" id="login_text"><span class="glyphicon glyphicon-user"></span>  First Name:</label><br>
+                    <input type="text" class="form-control" name="firstname" placeholder="Enter firstname" value="<?php char_to_html(Param::get('firstname')) ?>" required>
                 <hr>
-                <label class="form"><span class="glyphicon glyphicon-user"></span>  Last Name:</label><br>
-                    <input type="text" name="lastname" placeholder="Enter lastname" value="<?php char_to_html(Param::get('lastname')) ?>" required>
+                <label class="form" id="login_text"><span class="glyphicon glyphicon-user"></span>  Last Name:</label><br>
+                    <input type="text" class="form-control" name="lastname" placeholder="Enter lastname" value="<?php char_to_html(Param::get('lastname')) ?>" required>
                 <hr>
-                <label class="form"><span class="glyphicon glyphicon-user"></span>  Username:</label><br>
-                    <input type="text" name="username" placeholder="Enter username" value="<?php char_to_html(Param::get('username')) ?>" required>
+                <label class="form" id="login_text"><span class="glyphicon glyphicon-user"></span>  Username:</label><br>
+                    <input type="text" class="form-control" name="username" placeholder="Enter username" value="<?php char_to_html(Param::get('username')) ?>" required>
                 <hr>
-                <label class="form"><span class="glyphicon glyphicon-envelope"></span>  Email Address:</label><br>
-                    <input type="text" name="email" placeholder="Enter email" value="<?php char_to_html(Param::get('email')) ?>" required>
+                <label class="form" id="login_text"><span class="glyphicon glyphicon-envelope"></span>  Email Address:</label><br>
+                    <input type="text" class="form-control" name="email" placeholder="Enter email" value="<?php char_to_html(Param::get('email')) ?>" required>
                 <hr>
-                <label class="form"><span class="glyphicon glyphicon-lock"></span>  Password:</label><br>
-                    <input type="password" name="password" placeholder="Enter password" value="<?php char_to_html(Param::get('password')) ?>" required>
+                <label class="form" id="login_text"><span class="glyphicon glyphicon-lock"></span>  Password:</label><br>
+                    <input type="password" class="form-control" name="password" placeholder="Enter password" value="<?php char_to_html(Param::get('password')) ?>" required>
                 <hr>
                 <div class="col-sm-offset-4">
                     <input type="hidden" name="page_next" value="register_end">
